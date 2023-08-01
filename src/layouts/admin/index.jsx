@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
@@ -13,6 +13,8 @@ export default function Admin(props) {
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
+
+  const [full, setFull] = React.useState(true)
 
   const {check} = useAuthHook()
 
@@ -31,6 +33,7 @@ export default function Admin(props) {
 
   useEffect(() => {
     getActiveRoute(routes);
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   const getActiveRoute = (routes) => {
@@ -73,18 +76,18 @@ export default function Admin(props) {
 
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      <Sidebar open={open} full={full} setFull={setFull} onClose={() => setOpen(false)} />
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         <main
-          className={`mx-[12px] h-full flex-none transition-all md:pr-2 xl:ml-[313px]`}
+          className={`mx-[12px] h-full flex-none transition-all md:pr-2 ${!full?"xl:ml-[313px]":"xl:ml-[77px]"} `}
         >
           {/* Routes */}
           <div className="h-full">
             <Navbar
               onOpenSidenav={() => setOpen(true)}
-              logoText={"Horizon UI Tailwind React"}
+              logoText={"Money management"}
               brandText={currentRoute}
               secondary={getActiveNavbar(routes)}
               {...rest}

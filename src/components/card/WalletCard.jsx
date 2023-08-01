@@ -3,10 +3,10 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useWalletHook} from "../../hooks/wallet.hook";
-import {MdDelete} from "react-icons/all";
 import {useDisclosure} from "@chakra-ui/hooks";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/modal";
 import {Button} from "@chakra-ui/react";
+import {MdDelete} from "react-icons/md";
 
 const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
   const {

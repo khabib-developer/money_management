@@ -1,5 +1,6 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
+import {useAppStore} from "../../store/index.store";
 
 const series = (data) => {
    return [{
@@ -7,7 +8,7 @@ const series = (data) => {
    }]
 }
 
-const options = (title, increased) => ({
+const options = (title, increased, darkMode) => ({
    chart: {
       type: 'bar',
       width: "100%"
@@ -37,6 +38,7 @@ const options = (title, increased) => ({
       categories: ["Supposed", "Actual"],
    },
    yaxis: {
+      show: false,
       labels: {
          show: false
       }
@@ -58,13 +60,17 @@ const options = (title, increased) => ({
             }
          }
       }
+   },
+   theme: {
+      mode: darkMode? "dark":"light",
    }
 })
 
 const BarChart = ({title, data, increased}) => {
+   const {darkMode} = useAppStore()
    return (
        <Chart
-           options={options(title, increased)}
+           options={options(title, increased, darkMode)}
            series={series(data)}
            type="bar"
            width="100%"

@@ -24,7 +24,7 @@ const AddWallet = () => {
 
    const {addWallet} = useWalletHook()
 
-   const {categories} = useWalletStore()
+   const {categories, wallets} = useWalletStore()
 
    const {user} = useAppStore()
    const {
@@ -59,7 +59,7 @@ const AddWallet = () => {
        <div>
           <div className="p-1 mt-3 rounded ">
              <button onClick={onOpen}
-                     className="px-6 py-2 rounded text-white bg-gradient-to-r from-indigo-500 to-purple-500">Add wallet
+                     className={`px-6 py-2 rounded text-white bg-gradient-to-r from-indigo-500 to-purple-500 ${!wallets.length&&"animation-pulse"}`}>Add wallet
              </button>
           </div>
 
@@ -82,7 +82,7 @@ const AddWallet = () => {
                          <select
                              style={{right: "36px"}}
                              {...register("currency")}
-                             className="block py-2.5 px-0 absolute text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                             className="block py-2.5 px-0 transparent absolute text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                             {
                                Object.keys(currency).map((c, i) => <option key={i} value={c}>{currency[c]}</option>)
                             }
@@ -94,7 +94,7 @@ const AddWallet = () => {
                          </label>
                          <select
                              {...register("category")}
-                             className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                             className="block py-2.5 transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                             {
                                categories.map((c, i) => <option key={i} value={c.id}>{c.name}</option>)
                             }

@@ -40,8 +40,12 @@ export const useAuthHook = () => {
       setPermission(!!user)
       setUser(user)
 
-      if(!admin && user) navigate("/admin/default")
-      if(admin && !user) navigate("/auth/sign-in")
+      if(!admin && user) {
+         navigate("/admin/default")
+      }
+      if(admin && !user) {
+         navigate("/auth/sign-in")
+      }
    }, [])
 
    const logout = useCallback(async () => {

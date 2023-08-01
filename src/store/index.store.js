@@ -2,6 +2,8 @@ import {create}  from  "zustand"
 import {currency} from "../contants";
 
 export const useAppStore = create((set) => ({
+   darkMode: false,
+   setDarkMode: (darkMode) => set(() => ({darkMode})),
    user: null,
    setUser: (user) => set(() => ({user})),
    permission: false,

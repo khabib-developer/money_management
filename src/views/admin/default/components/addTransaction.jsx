@@ -32,10 +32,10 @@ const AddTransaction = ({setTargetId, targetId}) => {
        <div>
           <Modal onClose={onClose} size={'full'} isOpen={isOpen}>
              <ModalOverlay />
-             <ModalContent>
+             <ModalContent className="bg-white dark:!bg-navy-700 text-navy-700 dark:text-white" >
                 <ModalHeader>Add transaction</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody >
                    <Tables targetId={targetId} />
                 </ModalBody>
                 <ModalFooter>

@@ -9,7 +9,7 @@ import prettyNum from "pretty-num";
 import {useAppStore} from "../../../../store/index.store";
 import {useTransactionsStore} from "../../../../store/transaction.store";
 import {useMemo} from "react";
-import {ceil} from "./index";
+import {ceil} from "../../../../utils";
 
 const ColumnChartCard = () => {
 

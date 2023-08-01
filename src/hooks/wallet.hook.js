@@ -4,10 +4,13 @@ import {useWalletStore} from "../store/wallet.store";
 import {currency} from "../contants";
 import {useAppStore} from "../store/index.store";
 import {useTransactionsStore} from "../store/transaction.store";
+import {useNavigate} from "react-router-dom";
 
 
 export const useWalletHook = () => {
    const {fetchData} = useAxios()
+
+   const navigate = useNavigate()
 
    const { currentCurrency } = useAppStore()
 
@@ -16,6 +19,10 @@ export const useWalletHook = () => {
    const {transactions} = useTransactionsStore()
 
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
+
+   const redirectToWallet = useCallback(() => {
+      if(!wallets.length) navigate("/admin/profile")
+   }, [wallets])
 
    const getCategories = useCallback(async () => {
       const result = await fetchData("/accounts/category-wallet/")
@@ -68,5 +75,5 @@ export const useWalletHook = () => {
       }
    }, [wallets])
 
-   return {getCurrencyRate, convert, totalBalance, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories }
+   return {getCurrencyRate, convert, totalBalance, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories, redirectToWallet }
 }

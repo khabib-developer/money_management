@@ -10,7 +10,6 @@ const ComplexTable = ({columnsData, tableData, name, is_income}) => {
 
    const [targetId, setTargetId] = useState(null)
 
-
    return (
        <Card extra={"w-full h-full px-3 lg:px-6 pb-6 sm:overflow-x-auto"}>
           <div className="relative flex items-center justify-between pt-4">

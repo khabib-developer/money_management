@@ -2,23 +2,20 @@ import React from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import navbarimage from "assets/img/layout/Navbar.png";
-import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import {
-  IoMdNotificationsOutline,
-  IoMdInformationCircleOutline,
-} from "react-icons/io";
-import avatar from "assets/img/avatars/avatar4.png";
+import avatar from "assets/img/avatars/default.png";
 import {useAuthHook} from "../../hooks/auth.hook";
 import {useAppStore} from "../../store/index.store";
 import {currency, period} from "../../contants";
 import {useTransactionHook} from "../../hooks/transactions.hook";
+import {BiUser} from "react-icons/bi";
 
 const Navbar = (props) => {
   const { onOpenSidenav, brandText } = props;
-  const [darkmode, setDarkmode] = React.useState(false);
+  // const [darkmode, setDarkmode] = React.useState(false);
+
+  const { darkMode, setDarkMode} = useAppStore()
 
 
   const {user,currentCurrency,setCurrency} = useAppStore()
@@ -101,16 +98,16 @@ const Navbar = (props) => {
         <div
           className="cursor-pointer text-gray-600"
           onClick={() => {
-            if (darkmode) {
+            if (darkMode) {
               document.body.classList.remove("dark");
-              setDarkmode(false);
+              setDarkMode(false);
             } else {
               document.body.classList.add("dark");
-              setDarkmode(true);
+              setDarkMode(true);
             }
           }}
         >
-          {darkmode ? (
+          {darkMode ? (
             <RiSunFill className="h-4 w-4 text-gray-600 dark:text-white" />
           ) : (
             <RiMoonFill className="h-4 w-4 text-gray-600 dark:text-white" />
@@ -122,7 +119,7 @@ const Navbar = (props) => {
             <img
               className="h-10 w-10 rounded-full"
               src={avatar}
-              alt="Whoever"
+              alt={user?.username || ""}
             />
           }
           children={
@@ -130,25 +127,25 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, {user.username}
+                    👋 Hey, {user?.username || ""}
                   </p>{" "}
                 </div>
               </div>
               <div className="h-px w-full bg-gray-200 dark:bg-white/20 " />
 
               <div className="flex flex-col p-4">
-                <a
-                  href=" "
-                  className="text-sm text-gray-800 dark:text-white hover:dark:text-white"
-                >
-                  Profile Settings
-                </a>
-                <a
-                  href=" "
-                  className="mt-3 text-sm text-gray-800 dark:text-white hover:dark:text-white"
-                >
-                  Newsletter Settings
-                </a>
+                {/*<a*/}
+                {/*  href=" "*/}
+                {/*  className="text-sm text-gray-800 dark:text-white hover:dark:text-white"*/}
+                {/*>*/}
+                {/*  Profile Settings*/}
+                {/*</a>*/}
+                {/*<a*/}
+                {/*  href=" "*/}
+                {/*  className="mt-3 text-sm text-gray-800 dark:text-white hover:dark:text-white"*/}
+                {/*>*/}
+                {/*  Newsletter Settings*/}
+                {/*</a>*/}
                 <div
                   onClick={handleLogout}
                   className="mt-3 cursor-pointer text-sm font-medium text-red-500 hover:text-red-500"

@@ -6,7 +6,7 @@ import {useTransactionHook} from "../../../../hooks/transactions.hook";
 import {useAppStore} from "../../../../store/index.store";
 import prettyNum from "pretty-num";
 import {useTransactionsStore} from "../../../../store/transaction.store";
-import {ceil} from "./index";
+import {ceil} from "../../../../utils";
 
 const MonthlyRevenue = () => {
    const { totalBalance } = useWalletHook()
@@ -24,7 +24,7 @@ const MonthlyRevenue = () => {
              <div className=" text-navy-700 dark:text-white">
                 <div className="text-3xl text-center">
                    {
-                      ceil( ((current - initial) * 100 ) / (initial)  )
+                      ceil( ((current - initial) * 100 ) / (initial || 1)  )
                    } %
                 </div>
                 <h5 className="text-md pt-3 font-bold ">

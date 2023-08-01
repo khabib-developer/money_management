@@ -33,7 +33,7 @@ const useAxios = () => {
          console.log(err);
          if(error) {
             Object.values(err.response.data).forEach(err => {
-               setError(err[0])
+               setError(err)
             })
          }
          return false;

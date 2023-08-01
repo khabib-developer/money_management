@@ -5,6 +5,7 @@ import WalletCard from "../../../components/card/WalletCard";
 import NFt3 from "../../../assets/img/nfts/Nft3.png";
 import AddWallet from "./components/AddWallet";
 import {useWalletStore} from "../../../store/wallet.store";
+import React from "react";
 
 const ProfileOverview = () => {
    const {wallets, categories} = useWalletStore()
@@ -32,26 +33,30 @@ const ProfileOverview = () => {
                 Your cards
              </h4>
              <ul className="mt-4 flex items-center justify-between md:mt-0 md:justify-center md:!gap-5 2xl:!gap-12">
-                <li>
-                   <div>
-                      Cash
-                   </div>
-                </li>
-                <li>
-                   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">
-                      Card
-                   </div>
-                </li>
-                <li>
-                   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">
-                      Visa
-                   </div>
-                </li>
-                <li>
-                   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">
-                      <div>Cryptocurrency</div>
-                   </div>
-                </li>
+                {
+                   categories.map((c, i) =>
+                       <li key={i}>
+                         <div>
+                            Cash
+                         </div>
+                      </li>)
+                }
+
+                {/*<li>*/}
+                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
+                {/*      Card*/}
+                {/*   </div>*/}
+                {/*</li>*/}
+                {/*<li>*/}
+                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
+                {/*      Visa*/}
+                {/*   </div>*/}
+                {/*</li>*/}
+                {/*<li>*/}
+                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
+                {/*      <div>Cryptocurrency</div>*/}
+                {/*   </div>*/}
+                {/*</li>*/}
              </ul>
           </div>
 

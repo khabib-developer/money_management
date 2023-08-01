@@ -1,18 +1,22 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import prettyNum from "pretty-num";
 import {BtnCom} from "../../../../components/button";
 import {useTargetHook} from "../../../../hooks/target.hook";
 import {useAppStore} from "../../../../store/index.store";
 import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import {useTargetStore} from "../../../../store/target.store";
-import {MdDelete} from "react-icons/all";
+import {MdDelete} from "react-icons/md";
 
 const UpdateTarget = ({row, columns, setTargetId}) => {
    const {addOrUpdateTargets, deleteTarget} = useTargetHook()
    const {user} = useAppStore()
    const {targets} = useTargetStore()
+
+   useEffect(() => {
+      document.addEventListener("click", event => {
+         if(!event.target.classList.contains(`money__target__${row.id}`)) setShow(true)
+      })
+   }, [])
 
 
    const {
@@ -36,6 +40,9 @@ const UpdateTarget = ({row, columns, setTargetId}) => {
    }
 
    const handleDelete = async () => await deleteTarget(row.id)
+
+   const [show, setShow] = useState(true)
+
    return (
        <form onSubmit={handleSubmit(handleUpdate)} className="flex ">
           {
@@ -44,8 +51,13 @@ const UpdateTarget = ({row, columns, setTargetId}) => {
                 let data = <input {...register(`name`)} className="w-full transparent" defaultValue={row[column.accessor]}/>
 
                 if (column.accessor === "target_money")
-                   data = <div className="flex"><input  {...register(`target_money`)} className="w-3/5 transparent"
-                                                       defaultValue={row["target_money"]}/> {row.currency}</div>
+                   data = <div className="flex">
+                      <div className="relative w-3/5">
+                         <input {...register(`target_money`)} className={`transparent w-full ${show&&"opacity-0"} money__target__${row.id}`} defaultValue={row["target_money"]}/>
+                         {show&&<span onClick={() => setShow(false)} className={`absolute left-0 money__target__${row.id}`}> {prettyNum(row["target_money"], {thousandsSeparator: ' '})}  </span>}
+                      </div>
+                       {row.currency}
+                </div>
 
                 if (column.accessor === "actually")
                    data = <span>{prettyNum(row["actually"], {thousandsSeparator: ' '})} {row.currency}</span>

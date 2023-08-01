@@ -4,7 +4,7 @@ import {useTransactionHook} from "../../../../hooks/transactions.hook";
 import {useTargetHook} from "../../../../hooks/target.hook";
 import {useWalletHook} from "../../../../hooks/wallet.hook";
 import {useTransactionsStore} from "../../../../store/transaction.store";
-import {ceil} from "./index";
+import {ceil} from "../../../../utils";
 
 const BarChartCard = ({is_income}) => {
    const title = is_income ? "income" : "outcome"

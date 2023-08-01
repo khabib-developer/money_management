@@ -1,7 +1,7 @@
 import Chart from "react-apexcharts";
 import React from "react";
 import {useAppStore} from "../../store/index.store";
-const options = (categories) => ({
+const options = (categories, darkMode) => ({
    plotOptions: {
       bar: {
          columnWidth: '45%',
@@ -10,20 +10,26 @@ const options = (categories) => ({
    },
    colors: ["#4318FF", "#6AD2FF"],
    xaxis: {
-      categories: categories
+      categories: categories,
    },
-   dataLabels: {
-      enabled: false
+   yaxis: {
+      show: false,
    },
-   legend: {
-      show: false
-   },
-   labels: {
-      style: {
-         colors: ["#4318FF", "#6AD2FF"],
-         fontSize: '12px',
-         className: 'text-lg font-bold text-navy-700 dark:text-white'
+   tooltip: {
+      theme: 'dark',
+      x: {
+         show: false
+      },
+      y: {
+         title: {
+            formatter: function () {
+               return ''
+            }
+         }
       }
+   },
+   theme: {
+      mode: darkMode? "dark":"light",
    }
 })
 
@@ -37,9 +43,9 @@ const series = (data) => {
 }
 
 export const ColumnChartData = ({initial, current}) => {
-   const {currentCurrency} = useAppStore()
+   const {currentCurrency, darkMode} = useAppStore()
    return <Chart
-       options={options([`${initial} ${currentCurrency}`, `${current} ${currentCurrency}`])}
+       options={options([`${initial} ${currentCurrency}`, `${current} ${currentCurrency}`], darkMode)}
        series={series([initial, current])}
        type="bar"
        width="100%"
