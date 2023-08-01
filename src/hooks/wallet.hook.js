@@ -50,9 +50,7 @@ export const useWalletHook = () => {
 
    const totalBalance = useCallback(() => {
       if(wallets.length) {
-         console.log(wallets)
-         return 0
-         // return wallets.reduce((sum, wallet) => sum + convertToCurrentCurrency(wallet.balance, wallet.currency), 0)
+         return wallets.reduce((sum, wallet) => sum + convertToCurrentCurrency(wallet.balance, wallet.currency), 0)
       }
       return 0
    }, [wallets, currentCurrency, transactions ])
