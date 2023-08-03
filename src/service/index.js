@@ -1,7 +1,10 @@
 import axios from "axios";
 import {useAppStore} from "../store/index.store";
 
-const BASE_URL = "http://34.130.223.96/api"
+const BASE_URL = "https://mm.airi.uz/api"
+// const BASE_URL = "http://34.130.223.96/api"
+
+
 
 axios.defaults.baseURL = BASE_URL;
 

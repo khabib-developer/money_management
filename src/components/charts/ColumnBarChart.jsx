@@ -1,10 +1,10 @@
 import Chart from "react-apexcharts";
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {useAppStore} from "../../store/index.store";
-const options = (categories, darkMode) => ({
+const options = (categories, darkMode, full) => ({
    plotOptions: {
       bar: {
-         columnWidth: '45%',
+         columnWidth: full?'45%':"46%",
          distributed: true,
       }
    },
@@ -43,8 +43,16 @@ const series = (data) => {
 }
 
 export const ColumnChartData = ({initial, current}) => {
-   const {currentCurrency, darkMode} = useAppStore()
+   const {currentCurrency, darkMode, full} = useAppStore()
+   const ref = useRef()
+   useEffect(() => {
+      if(ref&&ref.current) {
+         console.log(ref.current)
+         ref.current.chart.parentResizeHandler()
+      }
+   }, [full])
    return <Chart
+       ref={ref}
        options={options([`${initial} ${currentCurrency}`, `${current} ${currentCurrency}`], darkMode)}
        series={series([initial, current])}
        type="bar"

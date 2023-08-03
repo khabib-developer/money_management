@@ -16,5 +16,8 @@ export const useAppStore = create((set) => ({
    clear:() => set(() => ({error: null, info: null})),
    setInfo: (info) => set(() => ({info})),
    currentCurrency: currency.uzs,
-   setCurrency: (currentCurrency) => set(() => ({currentCurrency}))
+   setCurrency: (currentCurrency) => set(() => ({currentCurrency})),
+   full: true,
+   setFull: (full) => set(() => ({full}))
+
 }))

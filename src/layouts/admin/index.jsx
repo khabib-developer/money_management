@@ -14,13 +14,13 @@ export default function Admin(props) {
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
-  const [full, setFull] = React.useState(true)
+  // const [full, setFull] = React.useState(true)
 
   const {check} = useAuthHook()
 
   const {getCurrencyRate} = useWalletHook()
 
-  const {user, permission} = useAppStore()
+  const { permission, full, setFull} = useAppStore()
 
   useEffect(() => {
     (async function(){
@@ -76,7 +76,7 @@ export default function Admin(props) {
 
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} full={full} setFull={setFull} onClose={() => setOpen(false)} />
+      <Sidebar open={open} onClose={() => setOpen(false)} />
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
