@@ -48,7 +48,7 @@ export const ColumnChartData = ({initial, current}) => {
    useEffect(() => {
       if(ref&&ref.current) {
          console.log(ref.current)
-         ref.current.chart.parentResizeHandler()
+         ref.current.chart.windowResizeHandler()
       }
    }, [full])
    return <Chart
