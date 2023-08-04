@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://mm.airi.uz/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://mm.airi.uz/:path*/"
+    }
+  ]
+}
