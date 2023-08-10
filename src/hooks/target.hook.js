@@ -39,7 +39,6 @@ export const useTargetHook = () => {
    const addOrUpdateTargets = useCallback(async (data, method = "POST", id = "") => {
       const target = await fetchData(`/money/money/${id}`, method, data)
       if(target) {
-         console.log(target)
          setTargets([...targets.filter(t => t.id !== target.id), target])
          setInfo(`Successfully ${id.trim() === "" ? "added" : "updated"}`)
       }

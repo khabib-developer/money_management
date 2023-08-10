@@ -14,8 +14,6 @@ export default function Admin(props) {
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
-  // const [full, setFull] = React.useState(true)
-
   const {check} = useAuthHook()
 
   const {getCurrencyRate} = useWalletHook()

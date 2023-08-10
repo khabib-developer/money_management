@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useAppStore} from "../store/index.store";
 
-const BASE_URL = "/api"
+const BASE_URL = "https://mm.airi.uz/api"
 // const BASE_URL = "http://34.130.223.96/api"
 
 
@@ -16,7 +16,7 @@ const useAxios = () => {
        method,
        body,
        headers,
-       error = false,
+       error = true,
        withCredentials = true
    ) => {
       try {
@@ -34,7 +34,8 @@ const useAxios = () => {
          return res.data;
       } catch (err) {
          console.log(err);
-         if(error) {
+         console.log(err, error)
+         if(err && error) {
             Object.values(err.response.data).forEach(err => {
                setError(err)
             })

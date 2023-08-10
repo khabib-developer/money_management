@@ -5,11 +5,14 @@ import {useAppStore} from "../../../../store/index.store";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {useTargetStore} from "../../../../store/target.store";
 
 const AddTarget = ({is_income}) => {
    const {addOrUpdateTargets} = useTargetHook()
 
-   const {user} = useAppStore()
+   const {targets} = useTargetStore()
+
+   const {user, setError} = useAppStore()
 
    const {
       register,
@@ -28,6 +31,7 @@ const AddTarget = ({is_income}) => {
    });
 
    const handleAdd = async (data) => {
+      if(targets.find(target => target.name === data.name)) return setError("Target already exists with the same name")
       await addOrUpdateTargets({...data, is_income: Boolean(is_income), user: user.id})
       reset({name: "",target_money:"" })
    }

@@ -15,6 +15,8 @@ const ColumnChartCard = () => {
 
    const { totalBalance } = useWalletHook()
 
+   const {income, outcome} = useTransactionsStore()
+
    const {currentCurrency} = useAppStore()
 
    const {initial} = useTransactionsStore()
@@ -23,7 +25,7 @@ const ColumnChartCard = () => {
 
    const initialGraph = useMemo(() => ceil( initial ), [initial, currentCurrency])
 
-   const currentGraph = useMemo(() => ceil( current ), [initial, currentCurrency])
+   const currentGraph = useMemo(() => ceil( current ), [initial, currentCurrency, income, outcome])
 
 
    return (

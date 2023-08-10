@@ -21,7 +21,7 @@ export const useAuthHook = () => {
    const navigate = useNavigate()
 
    const auth = useCallback(async (url, body) => {
-      const user = await fetchData(`/accounts${url}`, "POST", body)
+      const user = await fetchData(`/accounts${url}`, "POST", body, {}, true)
       if(user) {
          setUser(user)
          navigate("/admin/default")

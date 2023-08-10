@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Chart from 'react-apexcharts';
 import {useAppStore} from "../../store/index.store";
+import prettyNum from "pretty-num";
+import {ceil} from "../../utils";
 
 const series = (data) => {
    return [{
@@ -30,7 +32,7 @@ const options = (title, increased, darkMode) => ({
          enabled: true
       },
       formatter: function (val, opt) {
-         return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+         return opt.w.globals.labels[opt.dataPointIndex] + ":  " + prettyNum(ceil(val), {thousandsSeparator: ' '})
       },
       offsetX: 0,
    },
@@ -67,9 +69,16 @@ const options = (title, increased, darkMode) => ({
 })
 
 const BarChart = ({title, data, increased}) => {
-   const {darkMode} = useAppStore()
+   const {darkMode, full} = useAppStore()
+   const ref = useRef()
+   useEffect(() => {
+      if(ref&&ref.current) {
+         ref.current.chart.windowResizeHandler()
+      }
+   }, [full])
    return (
        <Chart
+           ref={ref}
            options={options(title, increased, darkMode)}
            series={series(data)}
            type="bar"

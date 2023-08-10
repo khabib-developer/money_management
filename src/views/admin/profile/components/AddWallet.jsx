@@ -45,6 +45,7 @@ const AddWallet = () => {
    });
 
    const handleAddWallet = async (data) => {
+      onClose()
       await addWallet(
           {
              ...data,
@@ -53,7 +54,6 @@ const AddWallet = () => {
              user: user.id
           })
       reset({})
-      onClose()
    }
    return (
        <div>

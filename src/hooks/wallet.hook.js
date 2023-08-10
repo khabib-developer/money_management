@@ -12,11 +12,9 @@ export const useWalletHook = () => {
 
    const navigate = useNavigate()
 
-   const { currentCurrency } = useAppStore()
+   const {setInfo, currentCurrency} = useAppStore()
 
-   const {setInfo} = useAppStore()
-
-   const {transactions} = useTransactionsStore()
+   const {transactions, initial, setInitial} = useTransactionsStore()
 
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
 
@@ -59,10 +57,12 @@ export const useWalletHook = () => {
    const addWallet = useCallback(async (data) => {
       const res = await fetchData("/accounts/wallet/", "POST", data)
       if(res) {
+         console.log(res)
          setWallet([...wallets, res])
          setInfo("wallet created")
+         setInitial(initial + convertToCurrentCurrency( res.balance, res.currency ) )
       }
-   }, [wallets])
+   }, [wallets, initial, currentCurrency])
 
    const getWallet = useCallback(async () => {
       const res = await fetchData("/accounts/wallet", "GET")
@@ -71,7 +71,11 @@ export const useWalletHook = () => {
 
    const updateWallet = useCallback(async (data, id, remove = false) => {
       const wallet = await fetchData(`/accounts/wallet/${id}/`, "PATCH", data)
-      if(remove) return setWallet([...wallets.filter(w => w.id !== id)])
+      if(remove) {
+         setInitial(initial - convertToCurrentCurrency( wallet.balance, wallet.currency ))
+         setWallet([...wallets.filter(w => w.id !== id)])
+         return
+      }
       if(wallet) {
          setWallet([...wallets.filter(w => w.id !== id), wallet])
          setInfo("Wallet updated")

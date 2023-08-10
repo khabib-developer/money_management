@@ -1,10 +1,12 @@
 import Chart from "react-apexcharts";
 import React, {useEffect, useRef} from "react";
 import {useAppStore} from "../../store/index.store";
+import prettyNum from "pretty-num";
+import {ceil} from "../../utils";
 const options = (categories, darkMode, full) => ({
    plotOptions: {
       bar: {
-         columnWidth: full?'45%':"46%",
+         columnWidth: '45%',
          distributed: true,
       }
    },
@@ -15,6 +17,11 @@ const options = (categories, darkMode, full) => ({
    yaxis: {
       show: false,
    },
+   dataLabels: {
+      formatter: function (val, opt) {
+         return prettyNum(ceil(val), {thousandsSeparator: ' '})
+      },
+   },
    tooltip: {
       theme: 'dark',
       x: {
@@ -22,7 +29,7 @@ const options = (categories, darkMode, full) => ({
       },
       y: {
          title: {
-            formatter: function () {
+            formatter: function (opt, val) {
                return ''
             }
          }
@@ -47,13 +54,12 @@ export const ColumnChartData = ({initial, current}) => {
    const ref = useRef()
    useEffect(() => {
       if(ref&&ref.current) {
-         console.log(ref.current)
          ref.current.chart.windowResizeHandler()
       }
    }, [full])
    return <Chart
        ref={ref}
-       options={options([`${initial} ${currentCurrency}`, `${current} ${currentCurrency}`], darkMode)}
+       options={options([`${prettyNum(ceil(initial), {thousandsSeparator: ' '})} ${currentCurrency}`, `${prettyNum(ceil(current), {thousandsSeparator: ' '})} ${currentCurrency}`], darkMode)}
        series={series([initial, current])}
        type="bar"
        width="100%"
