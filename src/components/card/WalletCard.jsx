@@ -7,6 +7,8 @@ import {useDisclosure} from "@chakra-ui/hooks";
 import {Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/modal";
 import {Button} from "@chakra-ui/react";
 import {MdDelete} from "react-icons/md";
+import prettyNum from "pretty-num";
+import {ceil} from "../../utils";
 
 const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
   const {
@@ -43,7 +45,7 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
           />
           <div className="absolute p-4 flex flex-col column justify-between text-white top-0 h-full w-full">
             <div className="flex justify-between pt-4 items-center">
-              <h3 className="lg:text-xl text-2xl">{amount} {currency}</h3>
+              <h3 className="lg:text-xl text-2xl">{prettyNum(amount, {thousandsSeparator: ' '})} {currency}</h3>
               <MdDelete className="cursor-pointer" onClick={onOpen} size={30} color="white" />
             </div>
             <div className="flex justify-between items-end pb-3">

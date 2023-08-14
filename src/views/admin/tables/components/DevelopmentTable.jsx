@@ -107,8 +107,8 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                       </select>
                    </div>
                    <div className="flex flex-1">
-                      <input defaultValue={new Date().toISOString().slice(0, 16)} {...register("transaction_date")}
-                             className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="datetime-local"/>
+                      <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("transaction_date")}
+                             className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
                    </div>
                    <input type='submit' className="opacity-0 hidden"/>
                 </form>
