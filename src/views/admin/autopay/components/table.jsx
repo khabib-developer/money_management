@@ -6,21 +6,19 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useAppStore} from "../../../../store/index.store";
-import TransactionListItem from "./transactionListItem";
-import {useTransactionHook} from "../../../../hooks/transactions.hook";
+import {useTargetHook} from "../../../../hooks/target.hook";
+import {AutoPayItem} from "./autoPayItem";
 
-const DevelopmentTable = ({transactions, is_income, targetId}) => {
-   const {wallets} = useWalletStore()
-
+const AutoPayTable = ({is_income, targetId}) => {
    const {targets} = useTargetStore()
 
    const {setError} = useAppStore()
 
-   const {addTransaction} = useTransactionHook()
+   const {wallets} = useWalletStore()
+
+   const {addAutoPay} = useTargetHook()
 
    const title = is_income ? 'Income' : 'Outcome'
-
-   const currentTargets = useMemo(() => targets.filter(target => is_income ? target.is_income : !target.is_income), [targets])
 
    const {
       register,
@@ -45,43 +43,49 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
       }
    }, [errors])
 
-   const handleAddTransaction = async (data) => {
-      const wallet = wallets.find(w => +w.id === +data.wallet)
-      const target = targets.find(t => +t.id === +data.money)
-      if(target.currency !== wallet.currency) {
-         console.log('error')
-         setError("currencies doesn't match")
-         return
+   const currentTargets = useMemo(() => targets.filter(target => is_income ? target.is_income : !target.is_income), [targets])
+
+
+   const allAutoPays = currentTargets.reduce((acc, target) => {
+      if (target.autoPay) {
+         return [...acc, ...target.autoPay];
       }
-      if(!target.is_income && (+data.amount > +wallet.balance)) return setError("amount is too large")
-      await addTransaction(data, wallet, target)
+      return acc;
+   }, []);
+
+   console.log(allAutoPays)
+
+   const defaultAmount = useMemo(() => targetId ? targets.find(target => +target.id === +targetId).target_money : 0, [targetId, targets])
+
+   const handleAddAutoPay = async (data) => {
+      addAutoPay(data, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(wallet => +wallet.id === +data.wallet))
       reset()
    }
    return (
        <Card extra={"w-full h-full p-4"}>
           <div className="relative flex items-center justify-between">
              <div className="text-xl font-bold pb-2 text-navy-700 dark:text-white">
-                {title} Table
+                {title} autopay
              </div>
           </div>
 
           <div className="h-full overflow-x-scroll xl:overflow-x-hidden">
              <div className="flex flex-col">
                 <div className="flex">
-                   <div className="flex-1">Description</div>
+                   <div className="flex-1">Name</div>
                    <div className="flex-1">Amount</div>
                    <div className="flex-1">Target</div>
                    <div className="flex-1">Wallet</div>
                    <div className="flex-1">Date</div>
                 </div>
-                <form onSubmit={handleSubmit(handleAddTransaction)} className="flex gap-1">
+                <form onSubmit={handleSubmit(handleAddAutoPay)} className="flex gap-1">
                    <div className="flex flex-1">
                       <input {...register("description")} className="my-2 text-sm outline-0 w-full transparent"
                              placeholder="description"/>
                    </div>
                    <div className="flex flex-1">
                       <input {...register("amount")} className="my-2  text-sm outline-0 w-full transparent"
-                             placeholder="amount"/>
+                             placeholder="amount" defaultValue={defaultAmount} />
                    </div>
                    <div className="flex flex-1">
                       <select {...register("money")} className="transparent text-sm w-4/5 outline-0" defaultValue={targetId?targetId : null}>
@@ -102,13 +106,19 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                       </select>
                    </div>
                    <div className="flex flex-1">
-                      <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("transaction_date")}
+                      <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("deadline")}
                              className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
                    </div>
                    <input type='submit' className="opacity-0 hidden"/>
                 </form>
+                {/*{*/}
+                {/*   currentTargets.map((target, i) => {*/}
+                {/*      if(target.autoPay && target.autoPay.length)*/}
+                {/*         return target.autoPay.map((item, i) => <AutoPayTable item={item} money={target} key={i} />)*/}
+                {/*   })*/}
+                {/*}*/}
                 {
-                   transactions.map((transaction, i) => <TransactionListItem transaction={transaction} key={i} />)
+                   allAutoPays.map((item, i) => <AutoPayItem key={i} item={item} />)
                 }
              </div>
           </div>
@@ -116,4 +126,6 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
    );
 }
 
-export default DevelopmentTable;
+export default AutoPayTable;
+
+

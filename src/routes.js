@@ -8,8 +8,10 @@ import {
   MdBarChart,
   MdPerson,
   MdLock,
+  MdOutlineAutorenew
 } from "react-icons/md";
 import SignUp from "./views/auth/SignUp";
+import AutoPay from "./views/admin/autopay";
 
 const routes = [
   {
@@ -27,12 +29,20 @@ const routes = [
     component: <DataTables />,
   },
   {
+    name: "Auto pay",
+    layout: "/admin",
+    path: "auto",
+    icon: <MdOutlineAutorenew className="h-6 w-6" />,
+    component: <AutoPay />,
+  },
+  {
     name: "Profile",
     layout: "/admin",
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
   },
+
   {
     name: "Sign In",
     layout: "/auth",

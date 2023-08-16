@@ -1,14 +1,17 @@
 import Card from "components/card";
 import React, {useMemo, useState} from "react";
-import AddTransaction from "./addTransaction";
 import AddTarget from "./addTarget";
 import UpdateTarget from "./updateTarget";
+import {Accordion} from "@chakra-ui/react";
+import AddTransactionOrAutoPay from "./addTransactionOrAutoPay";
 
 const ComplexTable = ({columnsData, tableData, name, is_income}) => {
    const columns = useMemo(() => columnsData, [columnsData]);
    const data = useMemo(() => tableData, [tableData]);
 
    const [targetId, setTargetId] = useState(null)
+
+   const [transaction, setTransaction] = useState(false)
 
    return (
        <Card extra={"w-full h-full px-3 lg:px-6 pb-6 sm:overflow-x-auto"}>
@@ -29,14 +32,17 @@ const ComplexTable = ({columnsData, tableData, name, is_income}) => {
                    }
                 </div>
                 <div className="flex flex-col gap-2 mt-2">
-                   <AddTarget is_income={is_income} />
-                   {
-                      data.map((row, i) => <UpdateTarget key={i} setTargetId={setTargetId} row={row} columns={columns} />)
-                   }
+                   <AddTarget is_income={is_income}/>
+                   <Accordion allowMultiple>
+                      {
+                         data.map((row, i) => <UpdateTarget key={i} setTargetId={setTargetId} setTransaction={setTransaction} row={row}
+                                                            columns={columns}/>)
+                      }
+                   </Accordion>
                 </div>
              </div>
           </div>
-          <AddTransaction targetId={targetId} setTargetId={setTargetId}/>
+          <AddTransactionOrAutoPay targetId={targetId} setTargetId={setTargetId} transaction={transaction}/>
        </Card>
    );
 };

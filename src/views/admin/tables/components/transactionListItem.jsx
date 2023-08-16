@@ -8,7 +8,7 @@ const TransactionListItem = ({transaction}) => {
           <div className="flex-1 text-sm">{prettyNum(transaction.amount, {thousandsSeparator: ' '})} {transaction.money.currency}</div>
           <div className="flex-1 text-sm">{transaction.money.name}</div>
           <div className="flex-1 text-sm">{transaction.wallet.name}</div>
-          <div className="flex-1 text-sm">{dateFormat(transaction.transaction_date, "mm-d-yyyy")}</div>
+          <div className="flex-1 text-sm">{dateFormat(transaction.deadline, "mm-d-yyyy")}</div>
        </div>
    );
 };

@@ -10,10 +10,13 @@ import {useAppStore} from "../../../../store/index.store";
 import {useTransactionsStore} from "../../../../store/transaction.store";
 import {useMemo} from "react";
 import {ceil} from "../../../../utils";
+import {useTargetHook} from "../../../../hooks/target.hook";
 
 const ColumnChartCard = () => {
 
    const { totalBalance } = useWalletHook()
+
+   const {supposedComes} = useTargetHook()
 
    const {income, outcome} = useTransactionsStore()
 
@@ -23,9 +26,12 @@ const ColumnChartCard = () => {
 
    const current = totalBalance()
 
-   const initialGraph = useMemo(() => ceil( initial ), [initial, currentCurrency])
+   const {incomeDuringThisMonth, outcomeDuringThisMonth} = useTransactionsStore()
 
    const currentGraph = useMemo(() => ceil( current ), [initial, currentCurrency, income, outcome])
+
+   const initialGraph = useMemo(() => ceil( current - incomeDuringThisMonth + outcomeDuringThisMonth ), [initial, currentCurrency])
+
 
 
    return (

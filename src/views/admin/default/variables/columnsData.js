@@ -18,7 +18,7 @@ export const columnsDataComplex = [
       accessor: "difference",
    },
    {
-      Header: "ADD",
+      Header: "Operations",
       accessor: "add",
    },
 

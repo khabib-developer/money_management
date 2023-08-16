@@ -11,8 +11,10 @@ import {
 } from "@chakra-ui/modal";
 import {Button} from "@chakra-ui/react";
 import Tables from "../../tables";
+import AutoPayTable from "../../autopay/components/table";
+import AutoPay from "../../autopay";
 
-const AddTransaction = ({setTargetId, targetId}) => {
+const AddTransactionOrAutoPay = ({setTargetId, targetId, transaction}) => {
    const {isOpen, onOpen, onClose} = useDisclosure()
 
 
@@ -36,7 +38,9 @@ const AddTransaction = ({setTargetId, targetId}) => {
                 <ModalHeader>Add transaction</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody >
-                   <Tables targetId={targetId} />
+                   {
+                      transaction ? <Tables targetId={targetId} /> : <AutoPay targetId={targetId} />
+                   }
                 </ModalBody>
                 <ModalFooter>
                    <Button onClick={onClose}>Close</Button>
@@ -48,4 +52,4 @@ const AddTransaction = ({setTargetId, targetId}) => {
    );
 };
 
-export default AddTransaction;
+export default AddTransactionOrAutoPay;

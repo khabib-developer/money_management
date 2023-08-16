@@ -1,6 +1,3 @@
-import Banner from "./components/Banner";
-import Storage from "./components/Storage";
-import Upload from "./components/Upload";
 import WalletCard from "../../../components/card/WalletCard";
 import NFt3 from "../../../assets/img/nfts/Nft3.png";
 import AddWallet from "./components/AddWallet";
@@ -12,20 +9,6 @@ const ProfileOverview = () => {
 
    return (
        <div className="flex w-full flex-col gap-5">
-          {/*<div className="w-ful mt-3 flex h-fit flex-col gap-5 lg:grid lg:grid-cols-12">*/}
-          {/*   <div className="col-span-4 lg:!mb-0">*/}
-          {/*      <Banner/>*/}
-          {/*   </div>*/}
-
-          {/*   <div className="col-span-3 lg:!mb-0">*/}
-          {/*      <Storage/>*/}
-          {/*   </div>*/}
-
-          {/*   <div className="z-0 col-span-5 lg:!mb-0">*/}
-          {/*      <Upload/>*/}
-          {/*   </div>*/}
-          {/*</div>*/}
-          {/* all project & ... */}
 
           <AddWallet/>
           <div className="mb-4 mt-5 flex flex-col justify-between px-4 md:flex-row md:items-center">
@@ -41,22 +24,6 @@ const ProfileOverview = () => {
                          </div>
                       </li>)
                 }
-
-                {/*<li>*/}
-                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
-                {/*      Card*/}
-                {/*   </div>*/}
-                {/*</li>*/}
-                {/*<li>*/}
-                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
-                {/*      Visa*/}
-                {/*   </div>*/}
-                {/*</li>*/}
-                {/*<li>*/}
-                {/*   <div className="text-base font-medium text-brand-500 hover:text-brand-500 dark:text-white">*/}
-                {/*      <div>Cryptocurrency</div>*/}
-                {/*   </div>*/}
-                {/*</li>*/}
              </ul>
           </div>
 
