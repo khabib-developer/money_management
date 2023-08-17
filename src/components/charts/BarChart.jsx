@@ -21,7 +21,7 @@ const options = (title, increased, darkMode) => ({
          horizontal: true,
       }
    },
-   colors: !increased?["#4318FF"]:["#bd0000"],
+   colors: !increased?["#4318FF"]:["#fca600"],
    dataLabels: {
       enabled: true,
       textAnchor: 'start',

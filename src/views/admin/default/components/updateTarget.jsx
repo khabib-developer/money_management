@@ -63,8 +63,8 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
 
    return (
        <form onSubmit={handleSubmit(handleUpdate)} className="flex">
-          <AccordionItem className={`!w-full !border-none ${!(row.autoPay && row.autoPay.length) && 'py-2'}`}>
-             <div className="flex">
+          <AccordionItem className={`!w-full !border-none  ${!(row.autoPay && row.autoPay.length) && 'py-2'}`}>
+             <div className={`flex ${isDeadline(row.autoPay) && "bg-red-600 !text-navy-900 rounded-md" }  px-2`}>
 
                 {
                    columns.map((column, index) => {
@@ -117,10 +117,9 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
 
                       return (
                           <div key={index}
-                               className={`flex-1 flex text-sm items-center font-bold ${isDeadline(row.autoPay) && "bg-red-600 !text-navy-900" }  ${row.autoPay && row.autoPay.length ? "!text-amber-500" : "text-navy-700"} dark:text-white`}>
+                               className={`flex-1 flex text-sm items-center font-bold  ${isDeadline(row.autoPay) && "!text-navy-900"} ${row.autoPay && row.autoPay.length ? "!text-amber-500" : "text-navy-700"} dark:text-white`}>
                              {data}
                           </div>)
-
                    })
                 }
 
@@ -151,7 +150,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                                         defaultValue={item.amount - item.paid_amount}/>
                               </div>
                               <div className="flex-1">
-                                 <BtnCom className="mt-0 px-4 py-1 text-xs">Pay</BtnCom>
+                                 <BtnCom className="!my-1 px-4 py-1 text-xs">Pay</BtnCom>
                               </div>
 
                            </div>)
