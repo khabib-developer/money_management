@@ -44,11 +44,14 @@ export const useTargetHook = () => {
    }, [])
 
    const addOrUpdateTargets = useCallback(async (data, method = "POST", id = "") => {
-      const target = await fetchData(`/money/money/${id}`, method, data)
-
+      const target = await fetchData(`/money/money/${id}/`, method, data)
+      let prevTarget = target;
       if (target) {
-         setTargets([...targets.filter(t => t.id !== target.id), target])
-         setInfo(`Successfully ${id.trim() === "" ? "added" : "updated"}`)
+         if(!target.auto_pays) prevTarget.auto_pays = []
+         if(id) prevTarget = targets.find(t => +t.id === +id)
+         console.log(prevTarget)
+         setTargets([...targets.filter(t => t.id !== target.id), {...target, auto_pays:prevTarget.auto_pays }])
+         setInfo(`Successfully ${id === "" ? "added" : "updated"}`)
       }
    }, [targets])
 
@@ -117,7 +120,6 @@ export const useTargetHook = () => {
          editedTarget
       ])
 
-      await addTransaction(transaction, wallet, editedTarget, true)
       setInfo("Done")
    }, [targets])
 

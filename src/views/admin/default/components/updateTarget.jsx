@@ -38,11 +38,11 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
       if (target) {
          await addOrUpdateTargets({
             name: data.name,
-            target_money: data.target_money,
+            target_money: data.target_money || target.target_money,
             currency: target.currency,
             is_income: target.is_income,
             user: user.id
-         }, "PUT", `${target.id}/`)
+         }, "PUT", target.id)
       }
    }
 

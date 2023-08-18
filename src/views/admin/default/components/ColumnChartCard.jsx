@@ -32,8 +32,6 @@ const ColumnChartCard = () => {
 
    const initialGraph = useMemo(() => ceil( current - incomeDuringThisMonth + outcomeDuringThisMonth ), [initial, currentCurrency])
 
-   console.log(currentGraph, initialGraph)
-
    return (
        <Card extra="rounded-[20px] p-3">
           <div className="flex flex-row justify-between px-3 pt-2">

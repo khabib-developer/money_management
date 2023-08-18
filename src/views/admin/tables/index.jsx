@@ -3,12 +3,15 @@ import DevelopmentTable from "./components/DevelopmentTable";
 import {useTransactionsStore} from "../../../store/transaction.store";
 import {useEffect} from "react";
 import {useWalletHook} from "../../../hooks/wallet.hook";
+import {useTransactionHook} from "../../../hooks/transactions.hook";
 
 const Tables = ({targetId}) => {
    const {income, outcome} = useTransactionsStore()
+   const {getTransaction} = useTransactionHook()
    const {redirectToWallet} = useWalletHook()
    useEffect(() => {
       redirectToWallet()
+      getTransaction()
    }, [])
    return (
        <div>

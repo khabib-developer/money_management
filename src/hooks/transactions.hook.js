@@ -27,7 +27,7 @@ export const useTransactionHook = () => {
 
    const addTransaction = useCallback(async (data, wallet, money, withoutFetch = false) => {
 
-      console.log(money)
+      console.log(data, wallet, money)
 
       let transaction = null
 
@@ -76,7 +76,6 @@ export const useTransactionHook = () => {
    const getSumTransactions = useCallback(async (currency = "UZS") => {
       const result = await fetchData("/money/dashboard/", "GET")
       if(result) {
-         console.log(totalBalance() - result[`income_${currency.toLowerCase()}`] + result[`outcome_${currency.toLowerCase()}`])
          setInitial( result[`total_balance_${currency.toLowerCase()}`] - result[`income_${currency.toLowerCase()}`] + result[`outcome_${currency.toLowerCase()}`] )
          setStatistics( result[`income_${currency.toLowerCase()}`], result[`outcome_${currency.toLowerCase()}`])
       }
