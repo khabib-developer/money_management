@@ -16,13 +16,9 @@ const AutoPay = ({targetId}) => {
        <div>
           <div className="mt-5 grid h-full grid-cols-1 gap-5 md:grid-cols-2">
              <AutoPayTable
-                 columnsData={columnsDataTransaction}
-                 transactions={outcome.sort((a, b) => b.id - a.d)}
                  targetId={targetId}
              />
              <AutoPayTable
-                 columnsData={columnsDataTransaction}
-                 transactions={income.sort((a, b) => b.id - a.d)}
                  targetId={targetId}
                  is_income
              />

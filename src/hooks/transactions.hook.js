@@ -10,7 +10,7 @@ import useAxios from "../service";
 
 export const useTransactionHook = () => {
    const {outcome, income, setIncome, setOutcome, incomeDuringThisMonth, outcomeDuringThisMonth, setInitial, setStatistics} = useTransactionsStore()
-
+   const { totalBalance } = useWalletHook()
    const {wallets, setWallet} = useWalletStore()
    const {targets, setTargets} = useTargetStore()
    const {fetchData} = useAxios()
@@ -25,23 +25,28 @@ export const useTransactionHook = () => {
       }
    }, [])
 
-   const addTransaction = useCallback(async (data, wallet, money) => {
+   const addTransaction = useCallback(async (data, wallet, money, withoutFetch = false) => {
 
-      const transaction = await fetchData("/money/money-item/", "POST", data)
+      console.log(money)
 
-      if(transaction) {
+      let transaction = null
 
-         console.log(transaction)
+      if(!withoutFetch) {
+         transaction = await fetchData("/money/money-item/", "POST", data)
+      }
+
+      if(transaction || withoutFetch) {
 
          const target = targets.find(t => t.id === money.id)
          const w = wallets.find(w => w.id === wallet.id)
 
          setTargets([...targets.filter(t => t.id !== money.id), {
             ...target,
+            auto_pays: money.auto_pays,
             actually: target.actually + data.amount
          }])
 
-         setInfo("Successfully created")
+         if(!withoutFetch) setInfo("Successfully created")
 
          if(target.is_income) {
             setWallet([
@@ -71,7 +76,8 @@ export const useTransactionHook = () => {
    const getSumTransactions = useCallback(async (currency = "UZS") => {
       const result = await fetchData("/money/dashboard/", "GET")
       if(result) {
-         setInitial(result[`total_balance_${currency.toLowerCase()}`])
+         console.log(totalBalance() - result[`income_${currency.toLowerCase()}`] + result[`outcome_${currency.toLowerCase()}`])
+         setInitial( result[`total_balance_${currency.toLowerCase()}`] - result[`income_${currency.toLowerCase()}`] + result[`outcome_${currency.toLowerCase()}`] )
          setStatistics( result[`income_${currency.toLowerCase()}`], result[`outcome_${currency.toLowerCase()}`])
       }
    }, [])

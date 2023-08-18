@@ -30,7 +30,8 @@ const AutoPayTable = ({is_income, targetId}) => {
       resolver: yupResolver(
           yup
               .object({
-                 amount: yup.number().required().min(0),
+                 amount: yup.number().required().min(1),
+                 paid_amount: yup.number().required().min(0),
                  description: yup.string().required(),
               })
               .required()
@@ -39,26 +40,23 @@ const AutoPayTable = ({is_income, targetId}) => {
 
    useEffect(() => {
       if (Object.keys(errors).length) {
-         setError("Complete all fields")
+         setError("Complete all fields correctly")
       }
    }, [errors])
 
-   const currentTargets = useMemo(() => targets.filter(target => is_income ? target.is_income : !target.is_income), [targets])
-
+   const currentTargets = targets.filter(target => is_income ? target.is_income : !target.is_income)
 
    const allAutoPays = currentTargets.reduce((acc, target) => {
-      if (target.autoPay) {
-         return [...acc, ...target.autoPay];
+      if (target.auto_pays) {
+         return [...acc, ...target.auto_pays];
       }
       return acc;
    }, []);
 
-   console.log(allAutoPays)
-
    const defaultAmount = useMemo(() => targetId ? targets.find(target => +target.id === +targetId).target_money : 0, [targetId, targets])
 
    const handleAddAutoPay = async (data) => {
-      addAutoPay(data, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(wallet => +wallet.id === +data.wallet))
+      await addAutoPay(data, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(target => +target.id === +data.money))
       reset()
    }
    return (
@@ -74,6 +72,8 @@ const AutoPayTable = ({is_income, targetId}) => {
                 <div className="flex">
                    <div className="flex-1">Name</div>
                    <div className="flex-1">Amount</div>
+                   <div className="flex-1">Paid amount</div>
+                   <div className="flex-1">Pay</div>
                    <div className="flex-1">Target</div>
                    <div className="flex-1">Wallet</div>
                    <div className="flex-1">Date</div>
@@ -86,6 +86,14 @@ const AutoPayTable = ({is_income, targetId}) => {
                    <div className="flex flex-1">
                       <input {...register("amount")} className="my-2  text-sm outline-0 w-full transparent"
                              placeholder="amount" defaultValue={defaultAmount} />
+                   </div>
+
+                   <div className="flex flex-1">
+                      <input {...register("paid_amount")} className="my-2  text-sm outline-0 w-full transparent"
+                             placeholder="paid_amount" defaultValue={defaultAmount} />
+                   </div>
+                   <div className="flex flex-1">
+
                    </div>
                    <div className="flex flex-1">
                       <select {...register("money")} className="transparent text-sm w-4/5 outline-0" defaultValue={targetId?targetId : null}>
@@ -111,12 +119,7 @@ const AutoPayTable = ({is_income, targetId}) => {
                    </div>
                    <input type='submit' className="opacity-0 hidden"/>
                 </form>
-                {/*{*/}
-                {/*   currentTargets.map((target, i) => {*/}
-                {/*      if(target.autoPay && target.autoPay.length)*/}
-                {/*         return target.autoPay.map((item, i) => <AutoPayTable item={item} money={target} key={i} />)*/}
-                {/*   })*/}
-                {/*}*/}
+
                 {
                    allAutoPays.map((item, i) => <AutoPayItem key={i} item={item} />)
                 }
