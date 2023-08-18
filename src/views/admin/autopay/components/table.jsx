@@ -8,6 +8,7 @@ import * as yup from "yup";
 import {useAppStore} from "../../../../store/index.store";
 import {useTargetHook} from "../../../../hooks/target.hook";
 import {AutoPayItem} from "./autoPayItem";
+import {BtnCom} from "../../../../components/button";
 
 const AutoPayTable = ({is_income, targetId}) => {
    const {targets} = useTargetStore()
@@ -90,7 +91,7 @@ const AutoPayTable = ({is_income, targetId}) => {
 
                    <div className="flex flex-1">
                       <input {...register("paid_amount")} className="my-2  text-sm outline-0 w-full transparent"
-                             placeholder="paid_amount" defaultValue={defaultAmount} />
+                             placeholder="paid_amount" defaultValue={0} />
                    </div>
                    <div className="flex flex-1">
 
@@ -113,11 +114,11 @@ const AutoPayTable = ({is_income, targetId}) => {
                          }
                       </select>
                    </div>
-                   <div className="flex flex-1">
+                   <div className="flex flex-1 items-center justify-around">
                       <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("deadline")}
                              className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
+                      <BtnCom className="!my-1 text-xs">Create</BtnCom>
                    </div>
-                   <input type='submit' className="opacity-0 hidden"/>
                 </form>
 
                 {

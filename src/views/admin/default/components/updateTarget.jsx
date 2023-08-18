@@ -10,6 +10,7 @@ import {AccordionButton, AccordionIcon, AccordionItem, AccordionPanel} from "@ch
 import {IoAdd} from "react-icons/io5";
 import {determineDifference} from "../../../../utils";
 import dateFormat from "dateformat";
+import {TbStatusChange} from "react-icons/tb";
 
 const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
    const {addOrUpdateTargets, deleteTarget, summOfAutoPays} = useTargetHook()
@@ -129,6 +130,9 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                                     onClick={handleOpenTransaction}>
                                <IoAdd/>
                             </BtnCom>
+                            <BtnCom type="submit" className="!m-0 text-xs lg:text-md !px-2 !py-1">
+                               <TbStatusChange />
+                            </BtnCom>
                             <BtnCom type="button" onClick={handleDelete}
                                     className="!m-0 text-xs !bg-red-600 lg:text-md !px-2 !py-1">
                                <MdDelete/>
@@ -152,7 +156,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                       <div className="flex-1">Amount</div>
                       <div className="flex-1">Paid</div>
                       <div className="flex-1">Deadline</div>
-                      <div className="flex-1">Pay</div>
+                      <div className="flex-1">{row.is_income? "Get":"Pay"}</div>
                       <div className="flex-1">Description</div>
                    </div>
                    {
@@ -167,12 +171,12 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                              <div className="flex-1 flex items-center">{dateFormat(item.deadline, "d-mm-yyyy")}</div>
                              <div className="flex-1 flex items-center">
                                 <input ref={paymentRef}
-                                       className={`transparent w-full `}
+                                       className={`transparent w-full`}
                                        defaultValue={+item.amount - +item.paid_amount}/>
                              </div>
                              <div className="flex-1">
                                 <BtnCom type="button" onClick={() => handlePay(item)}
-                                        className="!my-1 px-4 py-1 text-xs">Pay</BtnCom>
+                                        className="!my-1 px-4 py-1 text-xs">{row.is_income ? "Get":"Pay"}</BtnCom>
                              </div>
 
                           </div>)
@@ -181,7 +185,6 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                 </AccordionPanel> : <></>
              }
 
-             <input type="submit" className="hidden"/>
           </AccordionItem>
 
        </form>

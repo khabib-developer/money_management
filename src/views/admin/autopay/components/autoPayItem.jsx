@@ -8,6 +8,8 @@ import {determineDifference} from "../../../../utils";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useAppStore} from "../../../../store/index.store";
+import {BtnCom} from "../../../../components/button";
+import {TbStatusChange} from "react-icons/tb";
 
 
 export const AutoPayItem = ({item}) => {
@@ -55,8 +57,8 @@ export const AutoPayItem = ({item}) => {
           <div className="flex-1 text-sm">{prettyNum(item.paid_amount, {thousandsSeparator: ' '})}  {item.wallet.currency}</div>
           <div className="flex-1 text-sm"><input {...register('paid_amount')} className="transparent" placeholder="pay amount" defaultValue={'0'} /> {item.wallet.currency}</div>
           <div className="flex-1 text-sm">{item.money.name} {item.money.currency}</div>
-          <div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} <input type="submit" className="hidden"/></div>
-          <div className="flex-1 text-sm flex items-center justify-between">{dateFormat(item.deadline, "d-mm-yyyy")} <MdDelete onClick={handleDelete} className="cursor-pointer" /></div>
+          <div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} </div>
+          <div className="flex-1 text-sm flex items-center justify-between">{dateFormat(item.deadline, "d-mm-yyyy")} <BtnCom type="submit" className="text-xs !my-1"><TbStatusChange /></BtnCom> <MdDelete onClick={handleDelete} className="cursor-pointer" /></div>
        </form>
    );
 }

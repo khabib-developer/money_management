@@ -8,6 +8,7 @@ import * as yup from "yup";
 import {useAppStore} from "../../../../store/index.store";
 import TransactionListItem from "./transactionListItem";
 import {useTransactionHook} from "../../../../hooks/transactions.hook";
+import {BtnCom} from "../../../../components/button";
 
 const DevelopmentTable = ({transactions, is_income, targetId}) => {
    const {wallets} = useWalletStore()
@@ -92,7 +93,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                          }
                       </select>
                    </div>
-                   <div className="flex flex-1">
+                   <div className="flex flex-1 items-center gap-1">
                       <select {...register("wallet")} className="transparent text-sm w-4/5 outline-0">
                          {
                             wallets.map((wallet, i) =>
@@ -104,8 +105,9 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                    <div className="flex flex-1">
                       <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("transaction_date")}
                              className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
+                      <BtnCom type="submit" className="text-xs !my-2">Create</BtnCom>
                    </div>
-                   <input type='submit' className="opacity-0 hidden"/>
+                   {/*<input type='submit' className="opacity-0 hidden"/>*/}
                 </form>
                 {
                    transactions.map((transaction, i) => <TransactionListItem transaction={transaction} key={i} />)
