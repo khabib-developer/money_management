@@ -20,7 +20,7 @@ const ProfileOverview = () => {
                    categories.map((c, i) =>
                        <li key={i}>
                          <div>
-                            Cash
+                            {c.name}
                          </div>
                       </li>)
                 }
@@ -28,7 +28,7 @@ const ProfileOverview = () => {
           </div>
 
           {/* Wallet cards */}
-          <div className="z-20 grid grid-cols-1 gap-5 grid-cols-5 xl:grid-cols-3">
+          <div className="z-20 grid grid-cols-1 gap-5 grid-cols-4 xl:grid-cols-5">
              {
                 wallets.map((wallet, i) =>
                     <WalletCard

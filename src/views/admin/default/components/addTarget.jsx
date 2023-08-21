@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {currency} from "../../../../contants";
 import {useTargetHook} from "../../../../hooks/target.hook";
 import {useAppStore} from "../../../../store/index.store";
@@ -30,6 +30,12 @@ const AddTarget = ({is_income}) => {
               .required()
       ),
    });
+
+   useEffect(() => {
+      if (Object.keys(errors).length) {
+         setError("Complete all fields correctly")
+      }
+   }, [errors])
 
    const handleAdd = async (data) => {
       if (targets.find(target => target.name === data.name)) return setError("Target already exists with the same name")

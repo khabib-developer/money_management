@@ -1,5 +1,5 @@
 import Card from "components/card";
-import React, {useEffect, useMemo} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useWalletStore} from "../../../../store/wallet.store";
 import {useTargetStore} from "../../../../store/target.store";
 import {useForm} from "react-hook-form";
@@ -9,6 +9,7 @@ import {useAppStore} from "../../../../store/index.store";
 import {useTargetHook} from "../../../../hooks/target.hook";
 import {AutoPayItem} from "./autoPayItem";
 import {BtnCom} from "../../../../components/button";
+import DatePicker from "react-datepicker";
 
 const AutoPayTable = ({is_income, targetId}) => {
    const {targets} = useTargetStore()
@@ -18,6 +19,8 @@ const AutoPayTable = ({is_income, targetId}) => {
    const {wallets} = useWalletStore()
 
    const {addAutoPay} = useTargetHook()
+
+   const [startDate, setStartDate] = useState(new Date());
 
    const title = is_income ? 'Income' : 'Outcome'
 
@@ -34,6 +37,8 @@ const AutoPayTable = ({is_income, targetId}) => {
                  amount: yup.number().required().min(1),
                  paid_amount: yup.number().required().min(0),
                  description: yup.string().required(),
+                 money: yup.string().required(),
+                 wallet: yup.string().required(),
               })
               .required()
       ),
@@ -57,7 +62,7 @@ const AutoPayTable = ({is_income, targetId}) => {
    const defaultAmount = useMemo(() => targetId ? targets.find(target => +target.id === +targetId).target_money : 0, [targetId, targets])
 
    const handleAddAutoPay = async (data) => {
-      await addAutoPay(data, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(target => +target.id === +data.money))
+      await addAutoPay({...data, deadline: startDate}, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(target => +target.id === +data.money))
       reset()
    }
    return (
@@ -73,8 +78,8 @@ const AutoPayTable = ({is_income, targetId}) => {
                 <div className="flex">
                    <div className="flex-1">Name</div>
                    <div className="flex-1">Amount</div>
-                   <div className="flex-1">Paid amount</div>
-                   <div className="flex-1">Pay</div>
+                   <div className="flex-1">{!is_income?"Paid":"Got"} amount</div>
+                   <div className="flex-1">{!is_income?"Pay":"Get"}</div>
                    <div className="flex-1">Target</div>
                    <div className="flex-1">Wallet</div>
                    <div className="flex-1">Date</div>
@@ -115,14 +120,16 @@ const AutoPayTable = ({is_income, targetId}) => {
                       </select>
                    </div>
                    <div className="flex flex-1 items-center justify-around">
-                      <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("deadline")}
-                             className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
+                      {/*<input defaultValue={new Date().toISOString().slice(0, 10)} {...register("deadline")}*/}
+                      {/*       className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>*/}
+                      <DatePicker dateFormat="dd.MM.yyyy" selected={startDate} onChange={(date) => setStartDate(date)} className="p-1 my-2 outline-0 w-full transparent text-xs" />
+
                       <BtnCom className="!my-1 text-xs">Create</BtnCom>
                    </div>
                 </form>
 
                 {
-                   allAutoPays.map((item, i) => <AutoPayItem key={i} item={item} />)
+                   allAutoPays.sort((a, b) => a.id - b.id).map((item, i) => <AutoPayItem key={i} item={item} />)
                 }
              </div>
           </div>

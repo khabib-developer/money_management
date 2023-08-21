@@ -18,12 +18,12 @@ const Tables = ({targetId}) => {
           <div className="mt-5 grid h-full grid-cols-1 gap-5 md:grid-cols-2">
              <DevelopmentTable
                  columnsData={columnsDataTransaction}
-                 transactions={outcome.sort((a, b) => +b.id - +a.d)}
+                 transactions={outcome.sort((a, b) => - Date.parse(a.transaction_date) + Date.parse(b.transaction_date))}
                  targetId={targetId}
              />
              <DevelopmentTable
                  columnsData={columnsDataTransaction}
-                 transactions={income.sort((a, b) => +b.id - +a.d)}
+                 transactions={income.sort((a, b) => - Date.parse(a.transaction_date) + Date.parse(b.transaction_date))}
                  targetId={targetId}
                  is_income
              />

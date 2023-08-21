@@ -9,15 +9,13 @@ import {MdDelete, MdOutlineAutorenew} from "react-icons/md";
 import {AccordionButton, AccordionIcon, AccordionItem, AccordionPanel} from "@chakra-ui/react";
 import {IoAdd} from "react-icons/io5";
 import {determineDifference} from "../../../../utils";
-import dateFormat from "dateformat";
-import {TbStatusChange} from "react-icons/tb";
+import {AiFillEdit} from "react-icons/ai";
+import {AutoPayDashboard} from "../../autopay/components/AutoPayDashboard";
 
 const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
    const {addOrUpdateTargets, deleteTarget, summOfAutoPays} = useTargetHook()
    const {user} = useAppStore()
    const {targets} = useTargetStore()
-
-   const {updateAutoPay} = useTargetHook()
 
    useEffect(() => {
       document.addEventListener("click", event => {
@@ -25,7 +23,6 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
       })
    }, [])
 
-   const paymentRef = useRef()
 
    const {
       register,
@@ -64,19 +61,6 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
    const isDeadline = (auto_pays) => {
       if (auto_pays)
          return !!auto_pays.find(item => determineDifference(item.deadline))
-   }
-
-
-
-   const handlePay = (auto_pay) => {
-      if (paymentRef && paymentRef.current) {
-         const value = paymentRef.current.value
-         const data = {
-            ...auto_pay,
-            paid_amount: +value + +auto_pay.paid_amount
-         }
-         updateAutoPay(data.money, {...data, money: data.money.id, wallet: data.wallet.id}, data.wallet)
-      }
    }
 
    return (
@@ -126,12 +110,12 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
                                     onClick={handleOpenAutoPay}>
                                <MdOutlineAutorenew/>
                             </BtnCom>
-                            <BtnCom type="button" className="!m-0 text-xs lg:text-md !px-2 !py-1"
+                            <BtnCom type="button" className="!m-0 text-xs lg:text-md !px-1 !py-0"
                                     onClick={handleOpenTransaction}>
-                               <IoAdd/>
+                               <IoAdd className="h-5 w-5"/>
                             </BtnCom>
                             <BtnCom type="submit" className="!m-0 text-xs lg:text-md !px-2 !py-1">
-                               <TbStatusChange />
+                               <AiFillEdit/>
                             </BtnCom>
                             <BtnCom type="button" onClick={handleDelete}
                                     className="!m-0 text-xs !bg-red-600 lg:text-md !px-2 !py-1">
@@ -150,39 +134,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
              </div>
 
              {
-                (row.auto_pays && row.auto_pays.length) ? <AccordionPanel pb={4}>
-                   <div className="flex text-xs text-gray-600">
-                      <div className="flex-1">Description</div>
-                      <div className="flex-1">Amount</div>
-                      <div className="flex-1">Paid</div>
-                      <div className="flex-1">Deadline</div>
-                      <div className="flex-1">{row.is_income? "Get":"Pay"}</div>
-                      <div className="flex-1">Description</div>
-                   </div>
-                   {
-                      row.auto_pays.map((item, i) =>
-                          <div key={i}
-                               className={`flex align-middle text-sm font-bold px-1 rounded-md mt-2 ${determineDifference(item.deadline) && "bg-red-600"}`}>
-                             <div className="flex-1 flex items-center">{item.description}</div>
-                             <div
-                                 className="flex-1 flex items-center">{prettyNum(item.amount, {thousandsSeparator: ' '})} {item.wallet.currency}</div>
-                             <div
-                                 className="flex-1 flex items-center">{prettyNum(item.paid_amount, {thousandsSeparator: ' '})} {item.wallet.currency}</div>
-                             <div className="flex-1 flex items-center">{dateFormat(item.deadline, "d-mm-yyyy")}</div>
-                             <div className="flex-1 flex items-center">
-                                <input ref={paymentRef}
-                                       className={`transparent w-full`}
-                                       defaultValue={+item.amount - +item.paid_amount}/>
-                             </div>
-                             <div className="flex-1">
-                                <BtnCom type="button" onClick={() => handlePay(item)}
-                                        className="!my-1 px-4 py-1 text-xs">{row.is_income ? "Get":"Pay"}</BtnCom>
-                             </div>
-
-                          </div>)
-                   }
-
-                </AccordionPanel> : <></>
+                (row.auto_pays && row.auto_pays.length) ? <AccordionPanel pb={4}> <AutoPayDashboard row={row} /> </AccordionPanel> : <></>
              }
 
           </AccordionItem>

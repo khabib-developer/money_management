@@ -1,5 +1,5 @@
 import Card from "components/card";
-import React, {useEffect, useMemo} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useWalletStore} from "../../../../store/wallet.store";
 import {useTargetStore} from "../../../../store/target.store";
 import {useForm} from "react-hook-form";
@@ -9,9 +9,13 @@ import {useAppStore} from "../../../../store/index.store";
 import TransactionListItem from "./transactionListItem";
 import {useTransactionHook} from "../../../../hooks/transactions.hook";
 import {BtnCom} from "../../../../components/button";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const DevelopmentTable = ({transactions, is_income, targetId}) => {
    const {wallets} = useWalletStore()
+
+   const [startDate, setStartDate] = useState(new Date());
 
    const {targets} = useTargetStore()
 
@@ -35,6 +39,8 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
               .object({
                  amount: yup.number().required().min(0),
                  description: yup.string().required(),
+                 money: yup.number().required(),
+                 wallet: yup.number().required()
               })
               .required()
       ),
@@ -55,7 +61,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
          return
       }
       if(!target.is_income && (+data.amount > +wallet.balance)) return setError("amount is too large")
-      await addTransaction(data, wallet, target)
+      await addTransaction({...data, transaction_date: startDate}, wallet, target)
       reset()
    }
    return (
@@ -103,11 +109,11 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                       </select>
                    </div>
                    <div className="flex flex-1">
-                      <input defaultValue={new Date().toISOString().slice(0, 10)} {...register("transaction_date")}
-                             className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>
+                      {/*<input defaultValue={new Date().toISOString().slice(0, 10)} {...register("transaction_date")}*/}
+                      {/*       className="p-1 my-2 outline-0 w-full transparent text-xs" placeholder="date" type="date"/>*/}
+                      <DatePicker dateFormat="dd.MM.yyyy" selected={startDate} onChange={(date) => setStartDate(date)} className="p-1 my-2 outline-0 w-full transparent text-xs" />
                       <BtnCom type="submit" className="text-xs !my-2">Create</BtnCom>
                    </div>
-                   {/*<input type='submit' className="opacity-0 hidden"/>*/}
                 </form>
                 {
                    transactions.map((transaction, i) => <TransactionListItem transaction={transaction} key={i} />)

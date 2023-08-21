@@ -4,24 +4,24 @@ import {useWalletHook} from "./wallet.hook";
 import {useAppStore} from "../store/index.store";
 import {useWalletStore} from "../store/wallet.store";
 import useAxios from "../service";
-import {useTransactionsStore} from "../store/transaction.store";
 import {useTransactionHook} from "./transactions.hook";
 
 export const useTargetHook = () => {
    const {targets, setTargets} = useTargetStore()
    const {convertToCurrentCurrency} = useWalletHook()
    const {currencyRate} = useWalletStore()
-   const {income, outcome, setIncome, setOutcome} = useTransactionsStore()
    const {currentCurrency} = useAppStore()
 
-   const {addTransaction} = useTransactionHook()
+   const {wallets} = useWalletStore()
 
-   const {setInfo} = useAppStore()
+   const {updateStatistics} = useTransactionHook()
+
+   const {setInfo, setError} = useAppStore()
 
    const {fetchData} = useAxios()
 
    const summOfAutoPays = (target) => {
-      if (target.auto_pays.length) {
+      if (target.auto_pays && target.auto_pays.length) {
          return target.auto_pays.reduce((prev, item) => prev + +item.amount, 0)
       }
       return target.target_money
@@ -44,13 +44,13 @@ export const useTargetHook = () => {
    }, [])
 
    const addOrUpdateTargets = useCallback(async (data, method = "POST", id = "") => {
-      const url = id === ""?"":`${id}/`
+      const url = id === "" ? "" : `${id}/`
       const target = await fetchData(`/money/money/${url}`, method, data)
       let prevTarget = target;
       if (target) {
-         if(!target.auto_pays) prevTarget.auto_pays = []
-         if(id) prevTarget = targets.find(t => +t.id === +id)
-         setTargets([...targets.filter(t => t.id !== target.id), {...target, auto_pays:prevTarget.auto_pays }])
+         if (!target.auto_pays) prevTarget.auto_pays = []
+         if (id) prevTarget = targets.find(t => +t.id === +id)
+         setTargets([...targets.filter(t => t.id !== target.id), {...target, auto_pays: prevTarget.auto_pays}])
          setInfo(`Successfully ${id === "" ? "added" : "updated"}`)
       }
    }, [targets])
@@ -72,7 +72,7 @@ export const useTargetHook = () => {
          {
             ...currentTarget,
             auto_pays: [
-                ...(currentTarget.auto_pays || []).filter(t => +t.id !== +data.id),
+               ...(currentTarget.auto_pays || []).filter(t => +t.id !== +data.id),
                {
                   ...autopay,
                   wallet,
@@ -93,35 +93,57 @@ export const useTargetHook = () => {
          {
             ...target,
             auto_pays: [
-                ...target.auto_pays.filter(t => t.id !== id),
+               ...target.auto_pays.filter(t => t.id !== id),
             ]
          }
       ])
    }, [targets])
 
-   const updateAutoPay = useCallback(async (money, data, wallet) => {
-      const result = await fetchData(`/money/auto-pay/${data.id}/`, "PUT", data)
+   const updateAutoPay = useCallback(async (auto_pay, pay_amount) => {
+      const data = {
+         ...auto_pay,
+         money: auto_pay.money.id,
+         wallet: auto_pay.wallet.id
+      }
+
+      const wallet = wallets.find(wallet => wallet.id === auto_pay.wallet.id)
+
+      if(pay_amount > wallet.balance) return setError("not enough money")
+
+      const result = await fetchData(`/money/auto-pay/${auto_pay.id}/`, "PUT", data)
       const autoPay = result.auto_pay
       const transaction = result.transaction
-      const target = targets.find(t => +t.id === +money.id)
+
+      const target = targets.find(t => +t.id === +autoPay.money)
+
+      updateStatistics(transaction, auto_pay.wallet, auto_pay.money)
+
       const editedTarget = {
          ...target,
          auto_pays: [
             ...target.auto_pays.filter(t => +t.id !== +autoPay.id),
             {
                ...autoPay,
-               wallet:wallet,
-               money: money
+               wallet: auto_pay.wallet,
+               money: auto_pay.money
             }
          ]
       }
       setTargets([
-         ...targets.filter(t => +t.id !== +money.id),
+         ...targets.filter(t => +t.id !== +autoPay.money),
          editedTarget
       ])
-
       setInfo("Done")
-   }, [targets])
+   }, [targets, wallets])
 
-   return {supposedComes, getTargets, addOrUpdateTargets, deleteTarget, addAutoPay, deleteAutoPay, updateAutoPay, summOfAutoPays}
+   return {
+      supposedComes,
+      getTargets,
+      addOrUpdateTargets,
+      deleteTarget,
+      addAutoPay,
+      deleteAutoPay,
+      updateAutoPay,
+      summOfAutoPays
+   }
 }

@@ -30,7 +30,7 @@ const ColumnChartCard = () => {
 
    const currentGraph = useMemo(() => ceil( current ), [initial, currentCurrency, income, outcome])
 
-   const initialGraph = useMemo(() => ceil( current - incomeDuringThisMonth + outcomeDuringThisMonth ), [initial, currentCurrency])
+   const initialGraph = useMemo(() => ceil( current - (incomeDuringThisMonth - outcomeDuringThisMonth) ), [initial, currentCurrency])
 
    return (
        <Card extra="rounded-[20px] p-3">

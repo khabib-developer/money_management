@@ -32,9 +32,9 @@ const AddTransactionOrAutoPay = ({setTargetId, targetId, transaction}) => {
 
    return (
        <div>
-          <Modal onClose={onClose} size={'full'} isOpen={isOpen}>
+          <Modal onClose={onClose} size={'xl'} isOpen={isOpen} scrollBehavior="inside">
              <ModalOverlay />
-             <ModalContent className="bg-white dark:!bg-navy-700 text-navy-700 dark:text-white" >
+             <ModalContent className="bg-white dark:!bg-navy-700 text-navy-700 dark:text-white custom__modal">
                 <ModalHeader>Add transaction</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody >
