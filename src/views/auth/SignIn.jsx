@@ -26,7 +26,7 @@ export default function SignIn() {
     resolver: yupResolver(
         yup
             .object({
-              username: yup.string().required().min(4),
+              username: yup.string().email().required(),
               password: yup.string().required().min(2),
             })
             .required()
@@ -46,8 +46,8 @@ export default function SignIn() {
         <InputField
           variant="auth"
           extra="mb-3"
-          label="username*"
-          placeholder="Username"
+          label="Email*"
+          placeholder="Email"
           id="email"
           type="text"
           register={register}

@@ -102,8 +102,8 @@ const AddWallet = () => {
                       </div>
                    </ModalBody>
                    <ModalFooter>
-                      <Button className="mx-3" type="submit">Add</Button>
-                      <Button onClick={onClose}>Close</Button>
+                      <Button className="mx-3 text-navy-700 dark:text-white dark:bg-navy-700" type="submit">Add</Button>
+                      <Button className="text-navy-700 dark:text-white dark:bg-navy-700" onClick={onClose}>Close</Button>
                    </ModalFooter>
                 </form>
              </ModalContent>

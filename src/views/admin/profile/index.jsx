@@ -15,7 +15,7 @@ const ProfileOverview = () => {
              <h4 className="ml-1 text-2xl font-bold text-navy-700 dark:text-white">
                 Your cards
              </h4>
-             <ul className="mt-4 flex items-center justify-between md:mt-0 md:justify-center md:!gap-5 2xl:!gap-12">
+             <ul className="mt-4 flex items-center justify-between md:mt-0 md:justify-center md:!gap-5 2xl:!gap-12 text-navy-700 dark:text-white">
                 {
                    categories.map((c, i) =>
                        <li key={i}>

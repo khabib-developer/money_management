@@ -28,6 +28,10 @@ input:checked.defaultCheckbox::before {
 	opacity: 1;
 }
 
+body.dark {
+	background: #0b1437;
+}
+
 .transparent {
 	background: transparent;
 }

@@ -65,7 +65,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
 
    return (
        <form onSubmit={handleSubmit(handleUpdate)} className="flex">
-          <AccordionItem className={`!w-full !border-none  ${!(row.auto_pays && row.auto_pays.length) && 'py-2'}`}>
+          <AccordionItem className={`!w-full !border-none ${!(row.auto_pays && row.auto_pays.length) && 'py-2'}`}>
              <div className={`flex ${isDeadline(row.auto_pays) && "bg-red-600 !text-navy-900 rounded-md"}  px-2`}>
 
                 {
@@ -125,7 +125,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction}) => {
 
                       return (
                           <div key={index}
-                               className={`flex-1 flex text-sm items-center font-bold  ${isDeadline(row.auto_pays) && "!text-navy-900"} ${row.auto_pays && row.auto_pays.length ? "!text-amber-500" : "text-navy-700"} dark:text-white`}>
+                               className={`flex-1 flex text-sm items-center font-bold  ${isDeadline(row.auto_pays) && "!text-navy-900"} ${row.auto_pays && row.auto_pays.length ? "!italic" : "text-navy-700"} dark:text-white`}>
                              {data}
                           </div>)
                    })

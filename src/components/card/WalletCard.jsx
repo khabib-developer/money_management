@@ -50,10 +50,10 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
             </div>
             <div className="flex justify-between items-end pb-3">
               <form onSubmit={handleSubmit(handleUpdate)}>
-                <input {...register("name")} className="lg:text-xl text-2xl transparent" defaultValue={name} />
+                <input {...register("name")} className="text-xs transparent" defaultValue={name} />
                 <input className="hidden" type="submit" />
               </form>
-              <span className="lg:text-md text-xl">{type}</span>
+              <span className="text-xs">{type}</span>
             </div>
           </div>
 

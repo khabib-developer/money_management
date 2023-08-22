@@ -64,7 +64,7 @@ const options = (title, increased, darkMode) => ({
       }
    },
    theme: {
-      mode: darkMode? "dark":"light",
+      // mode: darkMode? "dark":"light",
    }
 })
 

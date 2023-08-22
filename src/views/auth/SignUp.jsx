@@ -21,7 +21,6 @@ export default function SignUp() {
       resolver: yupResolver(
           yup
               .object({
-                 username: yup.string().required().min(4),
                  email: yup.string().email().required(),
                  first_name: yup.string().required().min(3),
                  last_name: yup.string(),
@@ -33,7 +32,7 @@ export default function SignUp() {
       ),
    });
 
-   const onSubmit = async (data) => await auth("/register/", data)
+   const onSubmit = async (data) => await auth("/register/", {...data, username: data.email})
    return (
        <div className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
           <form onSubmit={handleSubmit(onSubmit)} className="mt-[10vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
@@ -69,17 +68,17 @@ export default function SignUp() {
                     name="last_name"
                 />
              </div>
-             <InputField
-                 variant="auth"
-                 extra="mb-3"
-                 label="Username*"
-                 placeholder="Something"
-                 id="email"
-                 type="text"
-                 state={errors.username && "error"}
-                 register={register}
-                 name="username"
-             />
+             {/*<InputField*/}
+             {/*    variant="auth"*/}
+             {/*    extra="mb-3"*/}
+             {/*    label="Username*"*/}
+             {/*    placeholder="Something"*/}
+             {/*    id="email"*/}
+             {/*    type="text"*/}
+             {/*    state={errors.username && "error"}*/}
+             {/*    register={register}*/}
+             {/*    name="username"*/}
+             {/*/>*/}
 
              {/* Email */}
              <InputField

@@ -24,7 +24,7 @@ export const useAuthHook = () => {
       const user = await fetchData(`/accounts${url}`, "POST", body, {}, true)
       if(user) {
          setUser(user)
-         navigate("/admin/default")
+         navigate("/admin/profile")
       }
    }, [])
 

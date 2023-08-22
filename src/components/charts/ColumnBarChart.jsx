@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from "react";
 import {useAppStore} from "../../store/index.store";
 import prettyNum from "pretty-num";
 import {ceil} from "../../utils";
-const options = (categories, darkMode, full) => ({
+const options = (categories, darkMode) => ({
    plotOptions: {
       bar: {
          columnWidth: '45%',
@@ -36,7 +36,7 @@ const options = (categories, darkMode, full) => ({
       }
    },
    theme: {
-      mode: darkMode? "dark":"light",
+      // mode: darkMode? "dark":"light",
    }
 })
 
@@ -59,7 +59,12 @@ export const ColumnChartData = ({initial, current}) => {
    }, [full])
    return <Chart
        ref={ref}
-       options={options([`${prettyNum(ceil(initial), {thousandsSeparator: ' '})} ${currentCurrency}`, `${prettyNum(ceil(current), {thousandsSeparator: ' '})} ${currentCurrency}`], darkMode)}
+       options={
+         options(
+             [`${prettyNum(ceil(initial), {thousandsSeparator: ' '})} ${currentCurrency}`, `${prettyNum(ceil(current), {thousandsSeparator: ' '})} ${currentCurrency}`],
+             darkMode
+         )
+      }
        series={series([initial, current])}
        type="bar"
        width="100%"

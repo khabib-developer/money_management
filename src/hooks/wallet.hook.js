@@ -12,7 +12,7 @@ export const useWalletHook = () => {
 
    const navigate = useNavigate()
 
-   const {setInfo, currentCurrency} = useAppStore()
+   const {setInfo, currentCurrency, setError} = useAppStore()
 
    const {transactions, initial, setInitial} = useTransactionsStore()
 
@@ -53,7 +53,6 @@ export const useWalletHook = () => {
       return 0
    }, [wallets, currentCurrency, transactions ])
 
-
    const addWallet = useCallback(async (data) => {
       const res = await fetchData("/accounts/wallet/", "POST", data)
       if(res) {
@@ -72,6 +71,7 @@ export const useWalletHook = () => {
    const updateWallet = useCallback(async (data, id, remove = false) => {
       const wallet = await fetchData(`/accounts/wallet/${id}/`, "PATCH", data)
       if(remove) {
+         if(wallets.length === 1) return setError("You must keep at least one wallet")
          setInitial(initial - convertToCurrentCurrency( wallet.balance, wallet.currency ))
          setWallet([...wallets.filter(w => w.id !== id)])
          return

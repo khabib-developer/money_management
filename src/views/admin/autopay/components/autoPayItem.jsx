@@ -54,7 +54,7 @@ export const AutoPayItem = ({item}) => {
 
    return (
        <form
-           className={`flex  ${determineDifference(item.deadline) && "py-2 bg-red-600 px-2 rounded-md"}  items-center px-1 `}
+           className={`flex ${determineDifference(item.deadline) && " bg-red-600  rounded-md"} mt-1 items-center px-1 `}
            onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-1 text-sm"><input {...register('description')} className="transparent"
                                                  defaultValue={item.description}/></div>

@@ -2,11 +2,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import DashIcon from "components/icons/DashIcon";
+import {useWalletStore} from "../../../store/wallet.store";
 // chakra imports
 
 export function SidebarLinks(props) {
   // Chakra color mode
   let location = useLocation();
+
+  const {wallets} = useWalletStore()
 
   const { routes } = props;
 
@@ -15,13 +18,18 @@ export function SidebarLinks(props) {
     return location.pathname.includes(routeName);
   };
 
+  const makeDisableRoutes = (route) => {
+    if(wallets.length) return route.layout + "/" + route.path
+    return "/admin/profile"
+  }
+
   const createLinks = (routes) => {
     return routes.map((route, index) => {
       if (
         route.layout === "/admin"
       ) {
         return (
-          <Link key={index} to={route.layout + "/" + route.path}>
+          <Link key={index} to={makeDisableRoutes(route)}>
             <div className="relative mb-5 flex hover:cursor-pointer">
               <li
                 className="my-[3px] flex cursor-pointer items-start px-4"

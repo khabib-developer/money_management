@@ -108,7 +108,7 @@ export const useTargetHook = () => {
 
       const wallet = wallets.find(wallet => wallet.id === auto_pay.wallet.id)
 
-      if(pay_amount > wallet.balance) return setError("not enough money")
+      if(!auto_pay.money.is_income && pay_amount > wallet.balance) return setError("not enough money")
 
       const result = await fetchData(`/money/auto-pay/${auto_pay.id}/`, "PUT", data)
       const autoPay = result.auto_pay
