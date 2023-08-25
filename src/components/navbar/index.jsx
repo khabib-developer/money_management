@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -10,13 +10,11 @@ import {useAppStore} from "../../store/index.store";
 import {currency, period} from "../../contants";
 import {useTransactionHook} from "../../hooks/transactions.hook";
 import {BiUser} from "react-icons/bi";
+import DeleteAccount from "./deleteAccount";
 
 const Navbar = (props) => {
   const { onOpenSidenav, brandText } = props;
-  // const [darkmode, setDarkmode] = React.useState(false);
-
   const { darkMode, setDarkMode} = useAppStore()
-
 
   const {user,currentCurrency,setCurrency} = useAppStore()
 
@@ -30,6 +28,8 @@ const Navbar = (props) => {
     await getSumTransactions(cr)
     setCurrency(cr)
   }
+
+  const [open, setOpen] = useState(false)
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
@@ -110,7 +110,7 @@ const Navbar = (props) => {
             <img
               className="h-10 w-10 rounded-full"
               src={avatar}
-              alt={user?.name || ""}
+              alt={user?.first_name || ""}
             />
           }
           children={
@@ -118,13 +118,19 @@ const Navbar = (props) => {
               <div className="p-4">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-navy-700 dark:text-white">
-                    👋 Hey, {user?.username || ""}
+                    👋 Hey, {user?.first_name || ""}
                   </p>{" "}
                 </div>
               </div>
               <div className="h-px w-full bg-gray-200 dark:bg-white/20 " />
 
               <div className="flex flex-col p-4">
+                <div
+                    onClick={() => setOpen(true)}
+                    className="mt-3 cursor-pointer text-sm font-medium text-red-500 hover:text-red-500"
+                >
+                  Delete account
+                </div>
                 <div
                   onClick={handleLogout}
                   className="mt-3 cursor-pointer text-sm font-medium text-red-500 hover:text-red-500"
@@ -137,6 +143,7 @@ const Navbar = (props) => {
           classNames={"py-2 top-8 -left-[180px] w-max"}
         />
       </div>
+      <DeleteAccount open={open} setOpen={setOpen} />
     </nav>
   );
 };

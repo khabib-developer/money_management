@@ -16,10 +16,11 @@ const useAxios = () => {
        body,
        headers,
        error = true,
-       withCredentials = true
+       withCredentials = true,
+       loading = true
    ) => {
       try {
-         setLoading(true);
+         setLoading(loading);
          const config = {
             method,
             url,

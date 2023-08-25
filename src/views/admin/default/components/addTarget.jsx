@@ -46,11 +46,11 @@ const AddTarget = ({is_income}) => {
    return (
        <form onSubmit={handleSubmit(handleAdd)} className="flex">
           <div className="flex-1 text-sm items-center font-bold text-navy-700 flex w-1/5">
-             <input {...register("name")} className=" my-2 w-full outline-0 transparent text-navy-700 dark:text-white"
+             <input {...register("name")} className={`my-2 ${errors.name&&"text-red-600"} w-full outline-0 transparent text-navy-700 dark:text-white`}
                     placeholder="name"/></div>
-          <div className="flex-1 text-sm items-center font-bold text-navy-700 flex w-1/5 items-center">
+          <div className={`flex-1 text-sm ${errors.name && "text-red-600"} items-center font-bold text-navy-700 flex w-1/5 items-center`}>
              <input {...register("target_money")}
-                    className="w-4/5 my-2 outline-0 transparent text-navy-700 dark:text-white"
+                    className={`w-4/5 my-2 outline-0 transparent text-navy-700 dark:text-white`}
                     placeholder="amount"/>
              <select {...register("currency")}
                      className="text-xs outline-0 pt-1 transparent h-fit text-navy-700 dark:text-white">

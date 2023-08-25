@@ -27,7 +27,7 @@ const Dropdown = (props) => {
 
    return (
        <div ref={wrapperRef} className="relative flex">
-          <div className="flex flex-1" onMouseDown={() => setOpenWrapper(true)}>
+          <div className="flex flex-1" onMouseDown={() => setOpenWrapper(prev => !prev)}>
              {button}
           </div>
           <div

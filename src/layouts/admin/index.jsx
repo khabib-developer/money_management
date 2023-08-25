@@ -79,7 +79,7 @@ export default function Admin(props) {
       <div className="min-h-screen w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         <main
-          className={`mx-[12px] h-full flex-none transition-all md:pr-2 ${!full?"xl:ml-[313px]":"xl:ml-[77px]"} `}
+          className={`mx-[12px] flex-none transition-all md:pr-2 ${!full?"xl:ml-[313px]":"xl:ml-[77px]"} `}
         >
           {/* Routes */}
           <div className="h-full">

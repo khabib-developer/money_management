@@ -9,6 +9,8 @@ import {Button} from "@chakra-ui/react";
 import {MdDelete} from "react-icons/md";
 import prettyNum from "pretty-num";
 import {ceil} from "../../utils";
+import {useMemo} from "react";
+import {useWalletStore} from "../../store/wallet.store";
 
 const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
   const {
@@ -26,12 +28,14 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
     ),
   });
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {wallets} = useWalletStore()
   const {updateWallet} = useWalletHook()
   const handleUpdate = async (data) => await updateWallet(data, id)
   const handleDelete = async (data) => {
     await updateWallet({active: false}, id, true)
     onClose()
   }
+  const allowedToDelete = useMemo(() => wallets.length > 1, [wallets])
   return (
     <Card
       extra={`flex flex-col w-full h-full !p-4 3xl:p-![18px] bg-white ${extra}`}
@@ -46,7 +50,7 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
           <div className="absolute p-4 flex flex-col column justify-between text-white top-0 h-full w-full">
             <div className="flex justify-between pt-4 items-center">
               <h3 className="lg:text-xl text-2xl">{prettyNum(amount, {thousandsSeparator: ' '})} {currency}</h3>
-              <MdDelete className="cursor-pointer" onClick={onOpen} size={30} color="white" />
+              <MdDelete className="cursor-pointer" onClick={onOpen} size={30} color={allowedToDelete?"white":"grey"} />
             </div>
             <div className="flex justify-between items-end pb-3">
               <form onSubmit={handleSubmit(handleUpdate)}>
@@ -62,13 +66,15 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Are you sure?</ModalHeader>
+        <ModalContent className="bg-white text-navy-900 dark:!bg-navy-800 dark:text-white">
+          <ModalHeader>{ allowedToDelete ? "Are you sure?" : "You must keep at least one wallet"}</ModalHeader>
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={handleDelete}>
-              Yes
-            </Button>
-            <Button variant='ghost' onClick={onClose}>No</Button>
+            {
+              allowedToDelete ? <Button className="text-navy-700 dark:text-white dark:bg-navy-700" colorScheme='blue' mr={3} onClick={handleDelete}>
+                Yes
+              </Button>: <></>
+            }
+            <Button className="text-navy-700 dark:text-white dark:bg-navy-700" variant='ghost' onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

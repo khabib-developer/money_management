@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 import {columnsDataComplex} from "./variables/columnsData";
 import Widget from "components/widget/Widget";
 import ComplexTable from "views/admin/default/components/ComplexTable";
@@ -26,6 +26,20 @@ const Dashboard = () => {
    useEffect(() => {
       redirectToWallet()
    }, [])
+
+   const incomeTargets = useMemo(() => {
+      const filtredIncomeTargets = targets.filter(t => t.is_income)
+      if(filtredIncomeTargets.filter(t => t.order === 0).length === filtredIncomeTargets.length)
+         return filtredIncomeTargets.map((t, i) => ({...t, order: i}))
+      return filtredIncomeTargets
+   }, [targets])
+
+   const outcomeTargets = useMemo(() => {
+      const filtredOutcomeTargets = targets.filter(t => !t.is_income)
+      if(filtredOutcomeTargets.filter(t => t.order === 0).length === filtredOutcomeTargets.length)
+         return filtredOutcomeTargets.map((t, i) => ({...t, order: i}))
+      return filtredOutcomeTargets
+   }, [targets])
 
    return (
        <div>
@@ -69,13 +83,13 @@ const Dashboard = () => {
 
              <ComplexTable
                  columnsData={columnsDataComplex}
-                 tableData={targets.sort((a, b) => a.id - b.id).filter(target => !target.is_income)}
+                 tableData={outcomeTargets}
                  name="Outcome"
              />
 
              <ComplexTable
                  columnsData={columnsDataComplex}
-                 tableData={targets.sort((a, b) => a.id - b.id).filter(target => target.is_income)}
+                 tableData={incomeTargets}
                  name="Income"
                  is_income
              />

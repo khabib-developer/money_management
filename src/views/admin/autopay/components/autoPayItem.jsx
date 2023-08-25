@@ -10,11 +10,14 @@ import * as yup from "yup";
 import {useAppStore} from "../../../../store/index.store";
 import {BtnCom} from "../../../../components/button";
 import {AiFillEdit} from "react-icons/ai";
+import {useWalletStore} from "../../../../store/wallet.store";
 
 
 export const AutoPayItem = ({item}) => {
 
    const {deleteAutoPay, updateAutoPay} = useTargetHook()
+
+   const {wallets} = useWalletStore()
 
    const {setError} = useAppStore()
 
@@ -42,10 +45,14 @@ export const AutoPayItem = ({item}) => {
    }, [errors])
 
    const onSubmit = async (data) => {
-      await updateAutoPay({
-         ...item,
-         paid_amount: data.paid_amount + item.paid_amount,
-      }, data.paid_amount)
+      await updateAutoPay(
+          {
+             ...item,
+             paid_amount: data.paid_amount + item.paid_amount,
+          },
+          data.paid_amount,
+          data.wallet
+      )
    }
 
    const handleDelete = async () => {
@@ -58,16 +65,26 @@ export const AutoPayItem = ({item}) => {
            onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-1 text-sm"><input {...register('description')} className="transparent"
                                                  defaultValue={item.description}/></div>
-          <div className="flex-1 text-sm"><input {...register('amount')} className="transparent"
-                                                 defaultValue={prettyNum(item.amount, {thousandsSeparator: ' '})}/> {item.wallet.currency}
+          <div className="flex-1 text-sm flex"><input {...register('amount')} className="transparent w-1/2"
+                                                      defaultValue={prettyNum(item.amount, {thousandsSeparator: ' '})}/> {item.wallet.currency}
           </div>
           <div
               className="flex-1 text-sm">{prettyNum(item.paid_amount, {thousandsSeparator: ' '})} {item.wallet.currency}</div>
-          <div className="flex-1 text-sm"><input {...register('paid_amount')} className="transparent"
-                                                 placeholder="pay amount" defaultValue={'0'}/> {item.wallet.currency}
+          <div className="flex-1 text-sm flex"><input {...register('paid_amount')} className="transparent  w-1/2"
+                                                      placeholder="pay amount"
+                                                      defaultValue={'0'}/> {item.wallet.currency}
           </div>
           <div className="flex-1 text-sm">{item.money.name} {item.money.currency}</div>
-          <div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} </div>
+          {/*<div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} </div>*/}
+          <div className="flex-1 text-sm">
+             <select {...register("wallet")} className="transparent text-sm w-4/5 outline-0"
+                     defaultValue={item.wallet.id}>
+                {
+                   wallets.map((wallet, i) => <option key={i}
+                                                      value={wallet.id}>{wallet.name} - {wallet.balance} {wallet.currency}</option>)
+                }
+             </select>
+          </div>
           <div className="flex-1 text-sm flex items-center justify-between">
              <span className="w-1/2">{dateFormat(item.deadline, "d-mm-yyyy")}</span>
              <BtnCom type="submit" className="text-xs !my-1 flex-1"><AiFillEdit/></BtnCom>

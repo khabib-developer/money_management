@@ -5,6 +5,7 @@ import {currency} from "../contants";
 export const useTransactionsStore = create((set) => ({
    initial: 0,
    setInitial: (initial) => set(() => ({initial})),
+   total: 0,
    incomeDuringThisMonth: 0,
    outcomeDuringThisMonth: 0,
    setStatistics:(incomeDuringThisMonth, outcomeDuringThisMonth) => set(({incomeDuringThisMonth, outcomeDuringThisMonth})),

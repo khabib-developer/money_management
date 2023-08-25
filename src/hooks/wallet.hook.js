@@ -34,12 +34,14 @@ export const useWalletHook = () => {
 
    const convert = useCallback((from, to, amount) => {
       if(currencyRate) {
+         if(from === to)
+            return +amount
          if(to === currency.uzs)
             return +currencyRate.Rate * amount
          else if(to === currency.usd)
             return +amount / +currencyRate.Rate
-      }
 
+      }
    }, [currencyRate, transactions])
 
    const convertToCurrentCurrency = (amount, currency) => {
@@ -71,7 +73,6 @@ export const useWalletHook = () => {
    const updateWallet = useCallback(async (data, id, remove = false) => {
       const wallet = await fetchData(`/accounts/wallet/${id}/`, "PATCH", data)
       if(remove) {
-         if(wallets.length === 1) return setError("You must keep at least one wallet")
          setInitial(initial - convertToCurrentCurrency( wallet.balance, wallet.currency ))
          setWallet([...wallets.filter(w => w.id !== id)])
          return

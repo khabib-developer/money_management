@@ -12,6 +12,9 @@ import {
 } from "react-icons/md";
 import SignUp from "./views/auth/SignUp";
 import AutoPay from "./views/admin/autopay";
+import ForgotPassword from "./views/auth/ForgotPassword";
+import VerifyLink from "./views/auth/VerifyLink";
+import VerifyRegisterLink from "./views/auth/VerifyRegisterLink";
 
 const routes = [
   {
@@ -56,6 +59,27 @@ const routes = [
     path: "sign-up",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignUp />,
+  },
+  {
+    name: "Sign Up",
+    layout: "/auth",
+    path: "forgot-password",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <ForgotPassword />,
+  },
+  {
+    name: "Sign Up",
+    layout: "/auth",
+    path: "verify/:token",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <VerifyLink />,
+  },
+  {
+    name: "Sign Up",
+    layout: "/auth",
+    path: "/register/verify/:token",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <VerifyRegisterLink />,
   },
 
 ];

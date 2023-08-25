@@ -6,8 +6,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useEffect} from "react";
 
-export default function SignIn() {
-   const {auth} = useAuthHook()
+export default function ForgotPassword() {
+   const {sendLinkToMail} = useAuthHook()
 
    const {check} = useAuthHook()
 
@@ -25,13 +25,12 @@ export default function SignIn() {
       resolver: yupResolver(
           yup
               .object({
-                 username: yup.string().required(),
-                 password: yup.string().required().min(2),
+                 gmail: yup.string().required().email(),
               })
               .required()
       ),
    });
-   const onSubmit = async (data) => await auth("/login/", data)
+   const onSubmit = async (data) => await sendLinkToMail(data)
 
    return (
        <div
@@ -39,10 +38,10 @@ export default function SignIn() {
           <form onSubmit={handleSubmit(onSubmit)}
                 className="mt-[10vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
              <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white">
-                Sign In
+                Reset password
              </h4>
              <p className="mb-9 ml-1 text-base text-gray-600">
-                Enter your username and password to sign in!
+                Enter your email!
              </p>
              <InputField
                  variant="auth"
@@ -53,45 +52,23 @@ export default function SignIn() {
                  type="text"
                  register={register}
                  state={errors.username && "error"}
-                 name="username"
-             />
-
-             <InputField
-                 variant="auth"
-                 extra="mb-3"
-                 label="Password*"
-                 placeholder="Min. 8 characters"
-                 id="password"
-                 type="password"
-                 register={register}
-                 state={errors.password && "error"}
-                 name="password"
+                 name="gmail"
              />
 
              <button
                  className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200">
-                Sign In
+                Send
              </button>
-             <div className="flex justify-between">
-                <div className="mt-4">
+             <div className="mt-4">
                   <span className=" text-sm font-medium text-navy-700 dark:text-gray-600">
                     Not registered yet?
                   </span>
-                   <Link
-                       to="/auth/sign-up"
-                       className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white"
-                   >
-                      Create an account
-                   </Link>
-                </div>
-                <div className="mt-4">
-                   <Link
-                       to="/auth/forgot-password"
-                       className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white"
-                   >
-                      Forgot password?
-                   </Link>
-                </div>
+                <Link
+                    to="/auth/sign-up"
+                    className="ml-1 text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-white"
+                >
+                   Create an account
+                </Link>
              </div>
 
           </form>
