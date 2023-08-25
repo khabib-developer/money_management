@@ -46,14 +46,14 @@ const AddTarget = ({is_income}) => {
    return (
        <form onSubmit={handleSubmit(handleAdd)} className="flex">
           <div className="flex-1 text-sm items-center font-bold text-navy-700 flex w-1/5">
-             <input {...register("name")} className={`my-2 ${errors.name&&"text-red-600"} w-full outline-0 transparent text-navy-700 dark:text-white`}
+             <input {...register("name")} className={`my-2 ${errors.name&&"!bg-red-400"} w-full outline-0 transparent text-navy-700 dark:text-white`}
                     placeholder="name"/></div>
-          <div className={`flex-1 text-sm ${errors.name && "text-red-600"} items-center font-bold text-navy-700 flex w-1/5 items-center`}>
+          <div className={`flex-1 text-sm items-center font-bold text-navy-700 flex w-1/5 items-center`}>
              <input {...register("target_money")}
-                    className={`w-4/5 my-2 outline-0 transparent text-navy-700 dark:text-white`}
+                    className={`w-4/5 my-2 outline-0 ${errors.target_money&&"!bg-red-400"} transparent text-navy-700 dark:text-white`}
                     placeholder="amount"/>
              <select {...register("currency")}
-                     className="text-xs outline-0 pt-1 transparent h-fit text-navy-700 dark:text-white">
+                     className={`text-xs outline-0 pt-1 transparent h-fit text-navy-700 dark:text-white ${errors.currency&&"!bg-red-400"} `}>
                 {
                    Object.values(currency).map((cr, i) => <option key={i} value={cr}>{cr}</option>)
                 }
@@ -61,7 +61,6 @@ const AddTarget = ({is_income}) => {
           </div>
           <div className="flex-1"></div>
           <div className="flex-1"></div>
-          {/*<input type="submit" className="opacity-0 flex-1"/>*/}
           <BtnCom type="submit" className="flex-1 text-xs !w-min">Create</BtnCom>
        </form>
    );

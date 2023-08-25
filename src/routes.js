@@ -25,7 +25,7 @@ const routes = [
     component: <MainDashboard />,
   },
   {
-    name: "Data Tables",
+    name: "Transactions",
     layout: "/admin",
     icon: <MdBarChart className="h-6 w-6" />,
     path: "data-tables",

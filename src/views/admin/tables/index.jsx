@@ -11,7 +11,6 @@ const Tables = ({targetId}) => {
    const {redirectToWallet} = useWalletHook()
    useEffect(() => {
       redirectToWallet()
-      // getTransaction()
    }, [])
    return (
        <div>

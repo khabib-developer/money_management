@@ -63,21 +63,21 @@ export const AutoPayItem = ({item}) => {
        <form
            className={`flex ${determineDifference(item.deadline) && " bg-red-600  rounded-md"} mt-1 items-center px-1 `}
            onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex-1 text-sm"><input {...register('description')} className="transparent"
+          <div className="flex-1 text-sm"><input {...register('description')} className={`transparent ${errors.description&&"!bg-red-400"}`}
                                                  defaultValue={item.description}/></div>
-          <div className="flex-1 text-sm flex"><input {...register('amount')} className="transparent w-1/2"
+          <div className="flex-1 text-sm flex"><input {...register('amount')} className={`transparent w-1/2 ${errors.amount&&"!bg-red-400"}`}
                                                       defaultValue={prettyNum(item.amount, {thousandsSeparator: ' '})}/> {item.wallet.currency}
           </div>
           <div
               className="flex-1 text-sm">{prettyNum(item.paid_amount, {thousandsSeparator: ' '})} {item.wallet.currency}</div>
-          <div className="flex-1 text-sm flex"><input {...register('paid_amount')} className="transparent  w-1/2"
+          <div className="flex-1 text-sm flex"><input {...register('paid_amount')} className={`transparent  w-1/2 ${errors.paid_amount&&"!bg-red-400"} `}
                                                       placeholder="pay amount"
                                                       defaultValue={'0'}/> {item.wallet.currency}
           </div>
           <div className="flex-1 text-sm">{item.money.name} {item.money.currency}</div>
           {/*<div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} </div>*/}
           <div className="flex-1 text-sm">
-             <select {...register("wallet")} className="transparent text-sm w-4/5 outline-0"
+             <select {...register("wallet")} className={`transparent text-sm w-4/5 outline-0 ${errors.wallet&&"!bg-red-400"} `}
                      defaultValue={item.wallet.id}>
                 {
                    wallets.map((wallet, i) => <option key={i}

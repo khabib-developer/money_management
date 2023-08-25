@@ -83,15 +83,15 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                 </div>
                 <form onSubmit={handleSubmit(handleAddTransaction)} className="flex gap-1">
                    <div className="flex flex-1">
-                      <input {...register("description")} className="my-2 text-sm outline-0 w-full transparent"
+                      <input {...register("description")} className={`my-2 text-sm outline-0 w-full transparent ${errors.description&&"!bg-red-400"}`}
                              placeholder="description"/>
                    </div>
                    <div className="flex flex-1">
-                      <input {...register("amount")} className="my-2  text-sm outline-0 w-full transparent"
+                      <input {...register("amount")} className={`my-2  text-sm outline-0 w-full transparent ${errors.amount&&"!bg-red-400"}`}
                              placeholder="amount"/>
                    </div>
                    <div className="flex flex-1">
-                      <select {...register("money")} className="transparent text-sm w-4/5 outline-0" defaultValue={targetId?targetId : null}>
+                      <select {...register("money")} className={`transparent text-sm w-4/5 outline-0 ${errors.money&&"!bg-red-400"}`} defaultValue={targetId?targetId : null}>
                          {
                             currentTargets.map((target, i) => (
                                 <option key={i} value={target.id}>{target.name} {target.currency}</option>)
@@ -99,7 +99,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                          }
                       </select>
                    </div>
-                   <div className="flex flex-1 items-center gap-1">
+                   <div className={`flex flex-1 items-center gap-1 ${errors.wallet&&"!bg-red-400"}`}>
                       <select {...register("wallet")} className="transparent text-sm w-4/5 outline-0">
                          {
                             wallets.map((wallet, i) =>
