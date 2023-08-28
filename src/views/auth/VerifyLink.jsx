@@ -13,6 +13,8 @@ export default function VerifyLink() {
 
    const [permission, setPermission] = useState(false)
 
+   const {setUser} = useAppStore()
+
    const [invalidToken, setInvalidToken] = useState(false)
 
    let { token } = useParams();
@@ -21,7 +23,10 @@ export default function VerifyLink() {
       (async function(){
          await check(false)
          const user = await verifyLink(token)
-         if(user) setPermission(user)
+         if(user) {
+            setPermission(user)
+            setUser(user)
+         }
          else setInvalidToken(true)
       }())
    }, [token])

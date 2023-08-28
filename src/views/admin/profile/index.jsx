@@ -32,7 +32,7 @@ const ProfileOverview = () => {
              {
                 wallets.map((wallet, i) =>
                     <WalletCard
-                        key={i}
+                        key={wallet.id}
                         id={wallet.id}
                         name={wallet.name}
                         amount={wallet.balance}

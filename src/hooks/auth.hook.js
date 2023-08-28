@@ -24,12 +24,15 @@ export const useAuthHook = () => {
 
    const auth = useCallback(async (url, body, login = true) => {
       const user = await fetchData(`/accounts${url}`, "POST", body, {}, true)
-      if(user && login) {
-         setUser(user)
-         navigate("/admin/profile")
-         return
+      if(user) {
+         if(login) {
+            setUser(user)
+            navigate("/admin/profile")
+            return
+         }
+         setInfo("Activation link sent successfully to email address")
+         return true
       }
-      setInfo("Activation link sent successfully to email address")
    }, [])
 
    const sendLinkToMail = useCallback(async (body) => {

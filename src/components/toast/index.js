@@ -9,6 +9,7 @@ export const Toast = () => {
    useEffect(() => {
       if(error) {
          toast({
+            position:"top",
             title: error,
             status: 'error',
             isClosable: true,
@@ -17,6 +18,8 @@ export const Toast = () => {
       }
       if(info) {
          toast({
+            position:"top",
+
             title: info,
             status: 'info',
             isClosable: true,

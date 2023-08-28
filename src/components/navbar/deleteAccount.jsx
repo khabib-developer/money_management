@@ -15,10 +15,12 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useAuthHook} from "../../hooks/auth.hook";
+import {useAppStore} from "../../store/index.store";
 
 const DeleteAccount = ({open, setOpen}) => {
    const {isOpen, onOpen, onClose} = useDisclosure()
    const {deleteAccount} = useAuthHook()
+   const {user} = useAppStore()
 
    const {
       register,
@@ -56,7 +58,7 @@ const DeleteAccount = ({open, setOpen}) => {
              <form onSubmit={handleSubmit(handleDelete)}>
                 <ModalBody>
                    <div>
-                      <InputField label="Email" placeholder="Email" state={errors.username && "error"}
+                      <InputField label="Email" placeholder="Email" defaultValue={user.email} state={errors.username && "error"}
                                   register={register}
                                   name="username"/>
                    </div>

@@ -5,11 +5,12 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useEffect} from "react";
+import {useAppStore} from "../../store/index.store";
+import {Alert, AlertIcon} from "@chakra-ui/react";
 
 export default function SignIn() {
-   const {auth} = useAuthHook()
 
-   const {check} = useAuthHook()
+   const {auth, check, user} = useAuthHook()
 
    useEffect(() => {
       check(false).then(() => {
@@ -35,7 +36,15 @@ export default function SignIn() {
 
    return (
        <div
-           className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
+           className="mt-16 mb-16 flex flex-col h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
+          {
+             user && <Alert status='success'>
+                 <AlertIcon />
+                 Your account has been successfully verified
+              </Alert>
+          }
+
+
           <form onSubmit={handleSubmit(onSubmit)}
                 className="mt-[10vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
              <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white">
@@ -49,6 +58,7 @@ export default function SignIn() {
                  extra="mb-3"
                  label="Email*"
                  placeholder="Email"
+                 defaultValue={user?user.email:""}
                  id="email"
                  type="text"
                  register={register}
