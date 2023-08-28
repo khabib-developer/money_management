@@ -105,10 +105,10 @@ export const useTargetHook = () => {
       ])
    }, [targets])
 
-   const updateAutoPay = useCallback(async (auto_pay, pay_amount, walletId) => {
+   const updateAutoPay = useCallback(async (auto_pay, pay_amount, walletId, moneyId) => {
       const data = {
          ...auto_pay,
-         money: auto_pay.money.id,
+         money: moneyId,
          wallet: walletId
       }
 
@@ -132,15 +132,30 @@ export const useTargetHook = () => {
             ...target.auto_pays.filter(t => +t.id !== +autoPay.id),
             {
                ...autoPay,
-               wallet: auto_pay.wallet,
-               money: auto_pay.money
+               wallet: w,
+               money: target
             }
          ]
       }
-      setTargets([
+
+      let modifiedTargets = [
          ...targets.filter(t => +t.id !== +autoPay.money),
          editedTarget
-      ])
+      ]
+
+      if(+moneyId !== +auto_pay.money.id) {
+         const oldTarget = targets.find(t => t.id === auto_pay.money.id)
+         console.log(oldTarget, moneyId, auto_pay)
+         modifiedTargets = [
+             ...modifiedTargets.filter(t => t.id !== oldTarget.id),
+            {
+               ...oldTarget,
+               auto_pays: [...oldTarget.auto_pays.filter(item => +item.id !== +autoPay.id)]
+            }
+         ]
+      }
+
+      setTargets(modifiedTargets)
       setInfo("Done")
    }, [targets, wallets])
 

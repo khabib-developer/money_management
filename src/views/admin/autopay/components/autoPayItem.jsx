@@ -53,7 +53,8 @@ export const AutoPayItem = ({item, currentTargets}) => {
              paid_amount: data.paid_amount + item.paid_amount,
           },
           data.paid_amount,
-          data.wallet
+          data.wallet,
+          data.money
       )
    }
 
