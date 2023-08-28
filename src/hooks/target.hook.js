@@ -112,7 +112,6 @@ export const useTargetHook = () => {
          wallet: walletId
       }
 
-
       const wallet = wallets.find(wallet => wallet.id === +walletId)
 
       if (!auto_pay.money.is_income && pay_amount > wallet.balance) return setError("not enough money")
@@ -125,7 +124,7 @@ export const useTargetHook = () => {
 
       const target = targets.find(t => +t.id === +autoPay.money)
 
-      updateStatistics(transaction, auto_pay.wallet, auto_pay.money)
+      if(transaction) updateStatistics(transaction, auto_pay.wallet, auto_pay.money)
 
       const editedTarget = {
          ...target,
@@ -146,7 +145,6 @@ export const useTargetHook = () => {
    }, [targets, wallets])
 
    const updateOrder = useCallback(async (data, is_income) => {
-      await fetchData("/money/update-order/", "POST", {order:data}, {}, false, true, false)
 
       const updatedTarget = targets.filter(target => is_income ? target.is_income : !target.is_income).map(target => {
          return {
@@ -158,6 +156,8 @@ export const useTargetHook = () => {
       const lastTargets = targets.filter(target => !is_income ? target.is_income : !target.is_income)
 
       setTargets(updatedTarget.concat(lastTargets))
+
+      await fetchData("/money/update-order/", "POST", {order:data}, {}, false, true, false)
 
    }, [targets])
 

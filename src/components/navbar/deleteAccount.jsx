@@ -58,7 +58,7 @@ const DeleteAccount = ({open, setOpen}) => {
              <form onSubmit={handleSubmit(handleDelete)}>
                 <ModalBody>
                    <div>
-                      <InputField label="Email" placeholder="Email" defaultValue={user.email} state={errors.username && "error"}
+                      <InputField label="Email" placeholder="Email" defaultValue={user?user.email:""} state={errors.username && "error"}
                                   register={register}
                                   name="username"/>
                    </div>

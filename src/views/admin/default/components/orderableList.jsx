@@ -12,31 +12,37 @@ const OrderableList = ({children, data, setData}) => {
       setCurrentCard(item)
    }
 
-   const dragOverHandler = (e) => {
+   const dragOverHandler = (e, item) => {
       e.preventDefault()
-      e.target.style.border = '1px solid'
+      const el = document.querySelector(`.draggable__item__${item.id}`)
+      if(el.classList.contains("draggable")) el.classList.add("border")
    }
 
 
-   const dragEndHandler = (e) => {
+   const dragEndHandler = (e, item) => {
       e.preventDefault()
-      e.target.style.border = ''
+      const el = document.querySelector(`.draggable__item__${item.id}`)
+      if(el.classList.contains("draggable")) el.classList.remove("border")
    }
 
    const dropHandler = (e, card) => {
       e.preventDefault()
       const reOrderedNewCard = {...currentCard, order:card.order}
-      setData(prev => prev.map(c => {
-         if(currentCard.id === c.id) return reOrderedNewCard
-         if(currentCard.order > card.order) {
-            if(c.order >= card.order && c.order < currentCard.order) return {...c, order: c.order += 1}
-         } else if(currentCard.order < card.order) {
-            if(c.order <= card.order &&  c.order > currentCard.order) return {...c, order: c.order -= 1}
-         }
-         return c
-      }))
+      setData(
+          [
+              ...data.map(c => {
+                 if(currentCard.id === c.id) return reOrderedNewCard
+                 if(currentCard.order > card.order) {
+                    if(c.order >= card.order && c.order < currentCard.order) return {...c, order: c.order += 1}
+                 } else if(currentCard.order < card.order) {
+                    if(c.order <= card.order &&  c.order > currentCard.order) return {...c, order: c.order -= 1}
+                 }
+                 return c
+              })
+          ]
+      )
 
-      e.target.style.border = ''
+      e.target.classList.remove("border")
 
    }
 
@@ -45,11 +51,12 @@ const OrderableList = ({children, data, setData}) => {
           {
              data.map((item, i) =>
                  <div
+                     className={`draggable mt-1 rounded-md draggable__item__${item.id}`}
                      key={item.id}
                      onDragStart={(e) => dragStartHandler(e, item)}
-                     onDragLeave={e => dragEndHandler(e)}
-                     onDragEnd={(e) => dragEndHandler(e)}
-                     onDragOver={(e) => dragOverHandler(e)}
+                     onDragLeave={e => dragEndHandler(e, item)}
+                     onDragEnd={(e) => dragEndHandler(e, item)}
+                     onDragOver={(e) => dragOverHandler(e, item)}
                      onDrop={(e) => dropHandler(e, item)}
                      draggable={active}>
                     {children(item, setActiveItem, setActive, active, activeItem)}

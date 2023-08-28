@@ -40,6 +40,31 @@ body.dark {
 	animation: pulse 2s infinite;
 }
 
+.flexible__height {
+	min-height: calc(100vh - 206px);
+}
+
+.draggable {
+	border:1px solid transparent;
+	transition: all ease 0.2s;
+}
+
+.draggable.border {
+	border:1px solid #000;
+}
+
+.dark .draggable.border {
+	border:1px solid #fff;
+}
+
+
+
+@media screen and (min-width:2000px) {
+	.wallets__wrapper {
+		grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+	}
+}
+
 .custom__modal {
 	max-width: none !important;
 	width: 96% !important;

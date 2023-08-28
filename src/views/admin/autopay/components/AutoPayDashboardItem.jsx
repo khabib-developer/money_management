@@ -16,7 +16,7 @@ const AutoPayDashboardItem = ({item, row}) => {
          ...auto_pay,
          paid_amount: +payAmount + +auto_pay.paid_amount
       }
-      await updateAutoPay(data, +payAmount)
+      await updateAutoPay(data, +payAmount, data.wallet.id)
    }
    const enableToPay = useMemo(() => !!wallets.find(wallet => wallet.id === item.wallet.id), [item, wallets])
    useEffect(() => {

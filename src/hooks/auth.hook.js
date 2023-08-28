@@ -10,7 +10,7 @@ export const useAuthHook = () => {
 
    const {fetchData} = useAxios()
 
-   const {setInfo, setError} = useAppStore()
+   const {setInfo, setError, setActiveUserData} = useAppStore()
 
    const {setUser, setPermission} = useAppStore()
 
@@ -39,9 +39,10 @@ export const useAuthHook = () => {
       const data = await fetchData(`/accounts/reset-password/`, "POST", body, {}, false)
       if(data) {
          setInfo("Link successfully sent")
-         return
+         return true
       }
       setError("Email not found")
+      return false
    }, [])
 
    const verifyLink = useCallback(async (token) => {
@@ -51,6 +52,7 @@ export const useAuthHook = () => {
    const verifyRegisterLink = useCallback(async (token) => {
       const user = await fetchData(`https://mm.airi.uz/api/accounts/register/?token=${token}`)
       if(user) {
+         setActiveUserData(user)
          setInfo("Link successfully activated")
          navigate("/auth/sign-in")
       }
@@ -59,7 +61,7 @@ export const useAuthHook = () => {
    const resetPassword = useCallback(async (body) => {
       const data = await fetchData(`/accounts/new-password/`, "POST", body, {}, false)
       if(data) {
-         setInfo("Link successfully sent")
+         setInfo("Password updated")
          setTimeout(() => {
             navigate("/auth/sign-in")
          }, 500)

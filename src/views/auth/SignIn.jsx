@@ -10,11 +10,14 @@ import {Alert, AlertIcon} from "@chakra-ui/react";
 
 export default function SignIn() {
 
-   const {auth, check, user} = useAuthHook()
+   const {auth, check} = useAuthHook()
+
+   const { activatedUserData, setActiveUserData } = useAppStore()
 
    useEffect(() => {
       check(false).then(() => {
       })
+      return () => setActiveUserData(null)
    }, [])
 
    const {
@@ -34,11 +37,12 @@ export default function SignIn() {
    });
    const onSubmit = async (data) => await auth("/login/", data)
 
+
    return (
        <div
            className="mt-16 mb-16 flex flex-col h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
           {
-             user && <Alert status='success'>
+              activatedUserData && <Alert status='success'>
                  <AlertIcon />
                  Your account has been successfully verified
               </Alert>
@@ -58,7 +62,7 @@ export default function SignIn() {
                  extra="mb-3"
                  label="Email*"
                  placeholder="Email"
-                 defaultValue={user?user.email:""}
+                 defaultValue={activatedUserData?activatedUserData.email:""}
                  id="email"
                  type="text"
                  register={register}

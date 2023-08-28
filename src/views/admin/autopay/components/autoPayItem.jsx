@@ -11,9 +11,10 @@ import {useAppStore} from "../../../../store/index.store";
 import {BtnCom} from "../../../../components/button";
 import {AiFillEdit} from "react-icons/ai";
 import {useWalletStore} from "../../../../store/wallet.store";
+import {useTargetStore} from "../../../../store/target.store";
 
 
-export const AutoPayItem = ({item}) => {
+export const AutoPayItem = ({item, currentTargets}) => {
 
    const {deleteAutoPay, updateAutoPay} = useTargetHook()
 
@@ -37,6 +38,7 @@ export const AutoPayItem = ({item}) => {
               .required()
       ),
    });
+
 
    useEffect(() => {
       if (Object.keys(errors).length) {
@@ -74,8 +76,16 @@ export const AutoPayItem = ({item}) => {
                                                       placeholder="pay amount"
                                                       defaultValue={'0'}/> {item.wallet.currency}
           </div>
-          <div className="flex-1 text-sm">{item.money.name} {item.money.currency}</div>
-          {/*<div className="flex-1 text-sm">{item.wallet.name} {item.wallet.currency} </div>*/}
+          <div className="flex-1 text-sm">
+             <select {...register("money")} className={`transparent text-sm w-4/5 outline-0 ${errors.description&&"!bg-red-400"}`} defaultValue={item.money.id}>
+                {
+                   currentTargets.map((target, i) => (
+                       <option key={i} value={target.id}>{target.name} {target.currency}</option>)
+                   )
+                }
+             </select>
+          </div>
+
           <div className="flex-1 text-sm">
              <select {...register("wallet")} className={`transparent text-sm w-4/5 outline-0 ${errors.wallet&&"!bg-red-400"} `}
                      defaultValue={item.wallet.id}>

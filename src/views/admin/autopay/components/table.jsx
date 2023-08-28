@@ -63,8 +63,10 @@ const AutoPayTable = ({is_income, targetId}) => {
 
    const handleAddAutoPay = async (data) => {
       await addAutoPay({...data, deadline: startDate}, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(target => +target.id === +data.money))
-      reset()
+      reset({amount: 0, description:"", paid_amount: 0})
    }
+
+
    return (
        <Card extra={"w-full h-full p-4"}>
           <div className="relative flex items-center justify-between">
@@ -95,17 +97,17 @@ const AutoPayTable = ({is_income, targetId}) => {
                    </div>
 
                    <div className="flex flex-1">
-                      <input {...register("paid_amount")} className={`my-2 text-sm outline-0 w-full ${errors.description&&"!bg-red-400"} transparent`}
+                      <input {...register("paid_amount")} className={`my-2 text-sm outline-0 w-full ${errors.paid_amount&&"!bg-red-400"} transparent`}
                              placeholder="paid_amount" defaultValue={0} />
                    </div>
                    <div className="flex flex-1">
 
                    </div>
                    <div className="flex flex-1">
-                      <select {...register("money")} className={`transparent text-sm w-4/5 outline-0 ${errors.description&&"!bg-red-400"}`} defaultValue={targetId?targetId : null}>
+                      <select {...register("money")} className={`transparent text-sm w-4/5 outline-0 ${errors.money&&"!bg-red-400"}`} defaultValue={targetId?targetId : null}>
                          {
-                            currentTargets.map((target, i) => (
-                                <option key={i} value={target.id}>{target.name} {target.currency}</option>)
+                            currentTargets.sort((a, b) => a.id - b.id).map((target, i) => (
+                                <option key={target.id} value={target.id}>{target.name} {target.currency}</option>)
                             )
                          }
                       </select>
@@ -113,8 +115,8 @@ const AutoPayTable = ({is_income, targetId}) => {
                    <div className="flex flex-1">
                       <select {...register("wallet")} className={`transparent text-sm w-4/5 outline-0 ${errors.wallet&&"!bg-red-400"} `}>
                          {
-                            wallets.map((wallet, i) =>
-                                <option key={i}
+                            wallets.sort((a, b) => a.id - b.id).map((wallet, i) =>
+                                <option key={wallet.id}
                                         value={wallet.id}>{wallet.name} - {wallet.balance} {wallet.currency}</option>)
                          }
                       </select>
@@ -129,7 +131,7 @@ const AutoPayTable = ({is_income, targetId}) => {
                 </form>
 
                 {
-                   allAutoPays.sort((a, b) => a.id - b.id).map((item, i) => <AutoPayItem key={i} item={item} />)
+                   allAutoPays.sort((a, b) => a.id - b.id).map((item, i) => <AutoPayItem currentTargets={currentTargets} key={i} item={item} />)
                 }
              </div>
           </div>

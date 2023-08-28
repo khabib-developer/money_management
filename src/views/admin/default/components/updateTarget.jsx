@@ -92,7 +92,7 @@ const UpdateTarget = ({row, columns, setTargetId, setTransaction, active, setAct
    }
 
    return (
-       <form onSubmit={handleSubmit(handleUpdate)} className={`flex mt-1 relative transition-all ${active?activeItem.id===row.id?"scale-95":"scale-90":""}`}>
+       <form onSubmit={handleSubmit(handleUpdate)} className={`flex flex-1 relative transition-all ${active?activeItem.id===row.id?"scale-95":"scale-90":""}`}>
           <div className={`absolute w-full h-full bg-navy-700 bg-opacity-40 top-0 left-0 drag-wrapper ${active?"z-10":"-z-10"}`}></div>
           <AccordionItem className={`!w-full !border-none ${!(row.auto_pays && row.auto_pays.length) && 'py-2'}`}>
              <div className={`flex  ${isDeadline(row.auto_pays) && "bg-red-600 !text-navy-900 rounded-md"}  px-2`}>

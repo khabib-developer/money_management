@@ -6,38 +6,16 @@ import {Accordion} from "@chakra-ui/react";
 import AddTransactionOrAutoPay from "./addTransactionOrAutoPay";
 import OrderableList from "./orderableList";
 import {useTargetHook} from "../../../../hooks/target.hook";
+import {useTargetStore} from "../../../../store/target.store";
 
 const ComplexTable = ({columnsData, tableData, name, is_income}) => {
    const columns = useMemo(() => columnsData, [columnsData]);
 
    const { updateOrder } = useTargetHook()
 
-   const [data, setData] = useState([])
-
-   useEffect(() => {
-      setData(tableData)
-   }, [])
-
-   useEffect(() => {
-      if(data.length) updateOrder(data.map(item => ({id: item.id, order:item.order})), is_income).then(() => {})
-   }, [data, is_income])
-
-   useEffect(() => {
-
-      setData(prev => {
-         let newData = prev
-         const highestOrder = Math.max(...prev.map(item => item.order)) + 1
-         if (prev.length > tableData.length) {
-            const excessItemId = prev.filter(item => !tableData.find(t => t.id === item.id))
-            newData = [...newData.filter(target => +target.id !== +excessItemId[0].id)]
-         } else if (prev.length < tableData.length) {
-            const newItem = tableData.filter(item => !prev.find(t => t.id === item.id))[0]
-            newData = [...newData, {...newItem, order: highestOrder}]
-         }
-
-         return newData
-      })
-   }, [tableData])
+   const setCurrentTargets = (updatedTargets) => {
+      updateOrder(updatedTargets.map(item => ({id: item.id, order:item.order})), is_income).then(() => {})
+   }
 
    const [targetId, setTargetId] = useState(null)
 
@@ -65,7 +43,7 @@ const ComplexTable = ({columnsData, tableData, name, is_income}) => {
                    <AddTarget is_income={is_income}/>
                    <Accordion allowMultiple>
 
-                      <OrderableList data={data.sort((a, b) => a.order - b.order)} setData={setData}>
+                      <OrderableList data={tableData.sort((a, b) => a.order - b.order)} setData={setCurrentTargets}>
                          {(provider, setActiveItem, setActive, active, activeItem) => {
                             return (
                                 <UpdateTarget

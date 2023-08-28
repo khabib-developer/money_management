@@ -15,7 +15,7 @@ export const AutoPayDashboard = ({ row}) => {
              <div className="flex-1">Description</div>
           </div>
           {
-             row.auto_pays.sort((a, b) => +a.id - +b.id).map((item, i) => <AutoPayDashboardItem item={item} row={row} key={i} />)
+             row.auto_pays.sort((a, b) => +a.id - +b.id).map((item, i) => <AutoPayDashboardItem item={item} row={row} key={item.id} />)
           }
        </>
    )
