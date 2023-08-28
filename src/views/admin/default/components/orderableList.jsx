@@ -41,8 +41,8 @@ const OrderableList = ({children, data, setData}) => {
               })
           ]
       )
-
-      e.target.classList.remove("border")
+      const el = document.querySelector(`.draggable__item__${item.id}`)
+      if(el.classList.contains("draggable")) el.classList.remove("border")
 
    }
 
