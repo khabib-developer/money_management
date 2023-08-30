@@ -36,10 +36,10 @@ export const useTargetHook = () => {
    const supposedComes = useCallback((is_income) => {
       const currentTargets = targets.filter(t => (is_income ? t.is_income : !t.is_income))
       if (currentTargets.length) {
-         return convertToCurrentCurrency(currentTargets
+         return currentTargets
              .reduce((a, b) => {
-                return a + +summOfAutoPays(b, b.currency)
-             }, 0), currentCurrency)
+                return a + convert(b.currency,currentCurrency, +summOfAutoPays(b, b.currency))
+             }, 0)
       }
       return 0
    }, [targets, currencyRate, currentCurrency])
@@ -49,14 +49,18 @@ export const useTargetHook = () => {
       setTargets(res)
    }, [])
 
-   const addOrUpdateTargets = useCallback(async (data, method = "POST", id = "") => {
+   const addOrUpdateTargets = useCallback(async (data, method = "POST", id = "", orderNumber = 0) => {
       const url = id === "" ? "" : `${id}/`
       const target = await fetchData(`/money/money/${url}`, method, data)
       let prevTarget = target;
+      let order = orderNumber
       if (target) {
          if (!target.auto_pays) prevTarget.auto_pays = []
-         if (id) prevTarget = targets.find(t => +t.id === +id)
-         setTargets([...targets.filter(t => t.id !== target.id), {...target, auto_pays: prevTarget.auto_pays}])
+         if (id) {
+            prevTarget = targets.find(t => +t.id === +id)
+            order = target.order
+         }
+         setTargets([...targets.filter(t => t.id !== target.id), {...target, auto_pays: prevTarget.auto_pays, order}])
          setInfo(`Successfully ${id === "" ? "added" : "updated"}`)
       }
    }, [targets])
@@ -145,7 +149,6 @@ export const useTargetHook = () => {
 
       if(+moneyId !== +auto_pay.money.id) {
          const oldTarget = targets.find(t => t.id === auto_pay.money.id)
-         console.log(oldTarget, moneyId, auto_pay)
          modifiedTargets = [
              ...modifiedTargets.filter(t => t.id !== oldTarget.id),
             {
@@ -176,7 +179,10 @@ export const useTargetHook = () => {
 
    }, [targets])
 
+   const enableToPayment = useCallback((id) => wallets.some(wallet => wallet.id === id), [wallets])
+
    return {
+      enableToPayment,
       supposedComes,
       getTargets,
       addOrUpdateTargets,

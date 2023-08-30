@@ -1,5 +1,5 @@
 import useAxios from "../service";
-import {useCallback, useMemo} from "react";
+import {useCallback, useEffect, useMemo} from "react";
 import {useWalletStore} from "../store/wallet.store";
 import {currency} from "../contants";
 import {useAppStore} from "../store/index.store";
@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 
 
 export const useWalletHook = () => {
+
    const {fetchData} = useAxios()
 
    const navigate = useNavigate()
@@ -17,6 +18,14 @@ export const useWalletHook = () => {
    const {transactions, initial, setInitial} = useTransactionsStore()
 
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
+
+   useEffect(() => {
+      // getCurrencyRate()
+      // (async function(){
+      //    const res = await fetchData("https://cbu.uz/uz/arkhiv-kursov-valyut/json/", "GET", null, {}, false, false)
+      //    setCurrencyRate(res[0])
+      // }())
+   }, [currentCurrency])
 
    const redirectToWallet = useCallback(() => {
       if(!wallets.length) navigate("/admin/profile")
@@ -29,6 +38,7 @@ export const useWalletHook = () => {
 
    const getCurrencyRate = useCallback(async () => {
       const res = await fetchData("https://cbu.uz/uz/arkhiv-kursov-valyut/json/", "GET", null, {}, false, false)
+      console.log(res[0])
       setCurrencyRate(res[0])
    }, [])
 
@@ -58,7 +68,6 @@ export const useWalletHook = () => {
    const addWallet = useCallback(async (data) => {
       const res = await fetchData("/accounts/wallet/", "POST", data)
       if(res) {
-         console.log(res)
          setWallet([...wallets, res])
          setInfo("wallet created")
          setInitial(initial + convertToCurrentCurrency( res.balance, res.currency ) )

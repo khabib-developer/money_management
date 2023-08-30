@@ -38,8 +38,10 @@ const AddTarget = ({is_income}) => {
    }, [errors])
 
    const handleAdd = async (data) => {
+      const currentTargets = targets.filter(target => is_income ? target.is_income : !target.is_income)
+      const highestOrder = currentTargets.length?Math.max(...currentTargets.map(target => target.order)) + 1:0
       if (targets.find(target => target.name === data.name)) return setError("Target already exists with the same name")
-      await addOrUpdateTargets({...data, is_income: Boolean(is_income), user: user.id})
+      await addOrUpdateTargets({...data, is_income: Boolean(is_income), user: user.id}, "POST", "", highestOrder)
       reset({name: "", target_money: ""})
    }
 

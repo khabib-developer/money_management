@@ -10,6 +10,9 @@ const OrderableList = ({children, data, setData}) => {
 
    const dragStartHandler = (e, item) => {
       setCurrentCard(item)
+      e.target.classList.add("larger")
+      const el = document.querySelector(`.draggable__item__${item.id}`)
+      if(el.classList.contains("draggable")) el.classList.add("larger")
    }
 
    const dragOverHandler = (e, item) => {
@@ -22,16 +25,18 @@ const OrderableList = ({children, data, setData}) => {
    const dragEndHandler = (e, item) => {
       e.preventDefault()
       const el = document.querySelector(`.draggable__item__${item.id}`)
-      if(el.classList.contains("draggable")) el.classList.remove("border")
+      if(el.classList.contains("draggable")) {
+         el.classList.remove("border")
+      }
    }
 
    const dropHandler = (e, card) => {
       e.preventDefault()
-      const reOrderedNewCard = {...currentCard, order:card.order}
+      const reorderedNewCard = {...currentCard, order:card.order}
       setData(
           [
               ...data.map(c => {
-                 if(currentCard.id === c.id) return reOrderedNewCard
+                 if(currentCard.id === c.id) return reorderedNewCard
                  if(currentCard.order > card.order) {
                     if(c.order >= card.order && c.order < currentCard.order) return {...c, order: c.order += 1}
                  } else if(currentCard.order < card.order) {
@@ -42,7 +47,13 @@ const OrderableList = ({children, data, setData}) => {
           ]
       )
       const el = document.querySelector(`.draggable__item__${card.id}`)
-      if(el.classList.contains("draggable")) el.classList.remove("border")
+      const elements = document.querySelectorAll(".draggable")
+      elements.forEach(el => {
+         el.classList.remove("larger")
+      })
+      if(el.classList.contains("draggable")) {
+         el.classList.remove("border")
+      }
 
    }
 

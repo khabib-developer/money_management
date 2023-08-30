@@ -18,12 +18,12 @@ export const useTransactionHook = () => {
       setInitial,
       setStatistics
    } = useTransactionsStore()
-   const {totalBalance} = useWalletHook()
+   const {totalBalance, getCurrencyRate} = useWalletHook()
    const {wallets, setWallet} = useWalletStore()
    const {targets, setTargets} = useTargetStore()
    const {fetchData} = useAxios()
 
-   const {setInfo} = useAppStore()
+   const {currentCurrency} = useAppStore()
 
    const getTransaction = useCallback(async () => {
       const res = await fetchData("/money/money-item/")
@@ -75,11 +75,12 @@ export const useTransactionHook = () => {
 
    const getSumTransactions = useCallback(async (currency = "UZS") => {
       const result = await fetchData("/money/dashboard/", "GET")
+      await getCurrencyRate()
       if (result) {
          setInitial(result[`total_balance_${currency.toLowerCase()}`] - result[`income_${currency.toLowerCase()}`] + result[`outcome_${currency.toLowerCase()}`])
          setStatistics(result[`income_${currency.toLowerCase()}`], result[`outcome_${currency.toLowerCase()}`])
       }
-   }, [])
+   }, [currentCurrency])
 
    return {addTransaction, getTransaction, getSumTransactions, updateStatistics}
 }

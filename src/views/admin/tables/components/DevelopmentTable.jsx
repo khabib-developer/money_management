@@ -37,7 +37,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
       resolver: yupResolver(
           yup
               .object({
-                 amount: yup.number().required().min(0),
+                 amount: yup.number().required().moreThan(0),
                  description: yup.string().required(),
                  money: yup.number().required(),
                  wallet: yup.number().required()
@@ -62,7 +62,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
       }
       if(!target.is_income && (+data.amount > +wallet.balance)) return setError("amount is too large")
       await addTransaction({...data, transaction_date: startDate}, wallet, target)
-      reset()
+      reset({amount:'', description:""})
    }
    return (
        <Card extra={"w-full h-full p-4"}>
@@ -93,7 +93,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                    <div className="flex flex-1">
                       <select {...register("money")} className={`transparent text-sm w-4/5 outline-0 ${errors.money&&"!bg-red-400"}`} defaultValue={targetId?targetId : null}>
                          {
-                            currentTargets.map((target, i) => (
+                            currentTargets.sort((a, b) => a.id - b.id).map((target, i) => (
                                 <option key={i} value={target.id}>{target.name} {target.currency}</option>)
                             )
                          }
@@ -102,7 +102,7 @@ const DevelopmentTable = ({transactions, is_income, targetId}) => {
                    <div className={`flex flex-1 items-center gap-1 ${errors.wallet&&"!bg-red-400"}`}>
                       <select {...register("wallet")} className="transparent text-sm w-4/5 outline-0">
                          {
-                            wallets.map((wallet, i) =>
+                            wallets.sort((a, b) => a.id - b.id).map((wallet, i) =>
                                 <option key={i}
                                         value={wallet.id}>{wallet.name} - {wallet.balance} {wallet.currency}</option>)
                          }
