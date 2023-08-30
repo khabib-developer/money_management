@@ -6,10 +6,13 @@ import {Accordion} from "@chakra-ui/react";
 import AddTransactionOrAutoPay from "./addTransactionOrAutoPay";
 import OrderableList from "./orderableList";
 import {useTargetHook} from "../../../../hooks/target.hook";
-import {useTargetStore} from "../../../../store/target.store";
 
 const ComplexTable = ({columnsData, tableData, name, is_income}) => {
    const columns = useMemo(() => columnsData, [columnsData]);
+
+   useEffect(() => {
+      console.log(tableData.map(el => el.order), is_income)
+   }, [tableData])
 
    const { updateOrder } = useTargetHook()
 

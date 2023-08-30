@@ -38,7 +38,6 @@ export const useWalletHook = () => {
 
    const getCurrencyRate = useCallback(async () => {
       const res = await fetchData("https://cbu.uz/uz/arkhiv-kursov-valyut/json/", "GET", null, {}, false, false)
-      console.log(res[0])
       setCurrencyRate(res[0])
    }, [])
 
