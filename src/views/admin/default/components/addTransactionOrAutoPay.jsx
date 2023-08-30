@@ -17,7 +17,6 @@ import AutoPay from "../../autopay";
 const AddTransactionOrAutoPay = ({setTargetId, targetId, transaction}) => {
    const {isOpen, onOpen, onClose} = useDisclosure()
 
-
    useEffect(() => {
       if (targetId) {
          onOpen()

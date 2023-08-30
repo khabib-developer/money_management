@@ -19,13 +19,9 @@ export const useWalletHook = () => {
 
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
 
-   useEffect(() => {
-      // getCurrencyRate()
-      // (async function(){
-      //    const res = await fetchData("https://cbu.uz/uz/arkhiv-kursov-valyut/json/", "GET", null, {}, false, false)
-      //    setCurrencyRate(res[0])
-      // }())
-   }, [currentCurrency])
+   const exchangeMoney = useCallback(async (data) => {
+      console.log(data)
+   }, [wallets])
 
    const redirectToWallet = useCallback(() => {
       if(!wallets.length) navigate("/admin/profile")
@@ -91,5 +87,5 @@ export const useWalletHook = () => {
       }
    }, [wallets])
 
-   return {getCurrencyRate, convert, totalBalance, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories, redirectToWallet }
+   return {getCurrencyRate, convert, totalBalance, exchangeMoney, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories, redirectToWallet }
 }

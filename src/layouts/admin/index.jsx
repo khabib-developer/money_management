@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
@@ -19,6 +19,29 @@ export default function Admin(props) {
   const {getCurrencyRate} = useWalletHook()
 
   const { permission, full, setFull} = useAppStore()
+
+  const {logout} = useAuthHook()
+
+  const time = useRef(null)
+
+  useEffect(() => {
+    const clickEvent = document.addEventListener("click", () => {
+      clearTimeout(time.current)
+      time.current = setTimeout(() => {
+        logout().then(() => console.log('logout'))
+      }, 300000)
+    })
+
+    const closeEffect = window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      return logout().then(() => console.log('logout'))
+    });
+
+    return () => {
+      document.removeEventListener("click",clickEvent)
+      window.removeEventListener("beforeunload",closeEffect)
+    }
+  }, [])
 
   useEffect(() => {
     (async function(){

@@ -9,8 +9,10 @@ import {Button} from "@chakra-ui/react";
 import {MdDelete} from "react-icons/md";
 import prettyNum from "pretty-num";
 import {ceil} from "../../utils";
-import {useMemo} from "react";
+import {useMemo, useState} from "react";
 import {useWalletStore} from "../../store/wallet.store";
+import {BtnCom} from "../button";
+import ExchangeMoney from "../../views/admin/profile/components/ExchangeMoney";
 
 const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
   const {
@@ -36,11 +38,21 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
     onClose()
   }
   const allowedToDelete = useMemo(() => wallets.length > 1, [wallets])
+
+  const [selectedWallet, setSelectedWallet] = useState(null)
+
+  const [receiver, setReceiver] = useState(false)
+
+  const handleExchange = (receiver = false) => {
+    setSelectedWallet(id)
+    setReceiver(receiver)
+  }
+
   return (
     <Card
       extra={`flex flex-col w-full h-full !p-4 3xl:p-![18px] bg-white ${extra}`}
     >
-      <div className="h-full w-full">
+      <div className="h-full w-full wallet">
         <div className="relative w-full">
           <img
             src={image}
@@ -59,10 +71,19 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
               </form>
               <span className="text-xs">{type}</span>
             </div>
+            <div className="absolute justify-end exchange__money w-full flex mt-2 top-1/3 gap-5">
+              <BtnCom className="transparent border-amber-50 border-2" onClick={() => handleExchange(false)}>
+                Send
+              </BtnCom>
+              <BtnCom className="transparent border-amber-50 border-2 mr-9" onClick={() => handleExchange(true)}>
+                Receive
+              </BtnCom>
+            </div>
           </div>
-
         </div>
       </div>
+
+      <ExchangeMoney receiver={receiver} selectedWallet={selectedWallet} setSelectedWallet={setSelectedWallet} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

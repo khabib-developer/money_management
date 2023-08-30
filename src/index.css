@@ -62,6 +62,13 @@ body.dark {
 	border:1px solid #fff;
 }
 
+.wallet .exchange__money {
+	display: none;
+}
+
+.wallet:hover .exchange__money {
+	display: flex;
+}
 
 
 @media screen and (min-width:2000px) {

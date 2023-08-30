@@ -10,9 +10,9 @@ import {useTargetHook} from "../../../../hooks/target.hook";
 const ComplexTable = ({columnsData, tableData, name, is_income}) => {
    const columns = useMemo(() => columnsData, [columnsData]);
 
-   useEffect(() => {
-      console.log(tableData.map(el => el.order), is_income)
-   }, [tableData])
+   // useEffect(() => {
+   //    console.log(tableData.map(el => el.order), is_income)
+   // }, [tableData])
 
    const { updateOrder } = useTargetHook()
 
