@@ -7,7 +7,6 @@ import AutoPayTable from "./components/table";
 
 
 const AutoPay = ({targetId}) => {
-   const {income, outcome} = useTransactionsStore()
    const {redirectToWallet} = useWalletHook()
    useEffect(() => {
       redirectToWallet()

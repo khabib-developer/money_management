@@ -18,7 +18,7 @@ export const useTransactionHook = () => {
       setInitial,
       setStatistics
    } = useTransactionsStore()
-   const {totalBalance, getCurrencyRate} = useWalletHook()
+   const {totalBalance, getCurrencyRate, convertToCurrentCurrency} = useWalletHook()
    const {wallets, setWallet} = useWalletStore()
    const {targets, setTargets} = useTargetStore()
    const {fetchData} = useAxios()
@@ -51,10 +51,10 @@ export const useTransactionHook = () => {
             }
          ])
          setIncome([...income, {...data, wallet, money}])
-         setStatistics(incomeDuringThisMonth + data.amount, outcomeDuringThisMonth)
+         setStatistics(incomeDuringThisMonth + convertToCurrentCurrency(data.amount, wallet.currency), outcomeDuringThisMonth)
          return
       }
-      setStatistics(incomeDuringThisMonth, outcomeDuringThisMonth + data.amount)
+      setStatistics(incomeDuringThisMonth, outcomeDuringThisMonth + convertToCurrentCurrency(data.amount, wallet.currency))
       setWallet([
          ...wallets.filter(w => w.id !== wallet.id),
          {

@@ -22,31 +22,35 @@ export default function Admin(props) {
 
   const {logout} = useAuthHook()
 
-  const time = useRef(null)
-
-  useEffect(() => {
-    const clickEvent = document.addEventListener("click", () => {
-      clearTimeout(time.current)
-      time.current = setTimeout(() => {
-        logout().then(() => console.log('logout'))
-      }, 300000)
-    })
-
-    const closeEffect = window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-      return logout().then(() => console.log('logout'))
-    });
-
-    return () => {
-      document.removeEventListener("click",clickEvent)
-      window.removeEventListener("beforeunload",closeEffect)
-    }
-  }, [])
+  // useEffect(() => {
+  //   let lastActivityTimestamp = Date.now();
+  //
+  //   const handleInactivity = () => {
+  //     lastActivityTimestamp = Date.now();
+  //   };
+  //
+  //   const checkInactivity = () => {
+  //     const currentTime = Date.now();
+  //     if (currentTime - lastActivityTimestamp >= 300000) {
+  //       logout().then(() => console.log('logout'));
+  //     }
+  //   };
+  //
+  //   document.addEventListener("click", handleInactivity, {passive:true});
+  //
+  //   const interval = setInterval(checkInactivity, 60000); // Check every minute
+  //
+  //   return () => {
+  //     document.removeEventListener("click", handleInactivity);
+  //     clearInterval(interval);
+  //   };
+  // }, [])
 
   useEffect(() => {
     (async function(){
        await Promise.all([await getCurrencyRate(), await check(true)])
     })()
+
     window.addEventListener("resize", () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );

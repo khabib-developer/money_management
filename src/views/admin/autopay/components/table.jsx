@@ -59,7 +59,13 @@ const AutoPayTable = ({is_income, targetId}) => {
       return acc;
    }, []);
 
-   const defaultAmount = useMemo(() => targetId ? targets.find(target => +target.id === +targetId).target_money : 0, [targetId, targets])
+   const defaultAmount = useMemo(() => {
+      if(targetId) {
+         const target = targets.find(target => +target.id === +targetId)
+         return target.is_income === Boolean(is_income) ? target.target_money : 0
+      }
+      return ""
+   }, [targetId, targets])
 
    const handleAddAutoPay = async (data) => {
       await addAutoPay({...data, deadline: startDate}, wallets.find(wallet => +wallet.id === +data.wallet), targets.find(target => +target.id === +data.money))

@@ -37,8 +37,8 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
       resolver: yupResolver(
           yup
               .object({
-                 from: yup.number().required().min(0),
-                 to: yup.number().required().min(0),
+                 wallet_id_from: yup.number().required().min(0),
+                 wallet_id_to: yup.number().required().min(0),
                  amount: yup.number().required().moreThan(0),
                  rate: yup.number().required().moreThan(0)
               })
@@ -58,7 +58,7 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
    }, [isOpen])
 
    const handleSend = async (data) => {
-      onClose()
+      // onClose()
       // await addWallet(
       //     {
       //        ...data,
@@ -66,9 +66,8 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
       //        category: Number(data.category),
       //        user: user.id
       //     })
-      console.log(data)
       await exchangeMoney(data)
-      reset({})
+      // reset({})
    }
    return (
        <Modal onClose={onClose} size={'lg'} isOpen={isOpen}>
@@ -79,13 +78,13 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
              <form onSubmit={handleSubmit(handleSend)}>
                 <ModalBody>
                    <div className="p-2">
-                      <label>
+                      <label className={`${ errors.wallet_id_from && "text-red-600"}`}>
                          From
                       </label>
                       <select
-                          {...register("from")}
+                          {...register("wallet_id_from")}
                           defaultValue={!receiver?selectedWallet:-1}
-                          className="block py-2.5 transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                          className={`block ${ errors.wallet_id_from && "border-red-600"} py-2.5 transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
                          <option value="-1"></option>
                          {
                             wallets.map((c, i) => <option disabled={receiver&&selectedWallet===c.id} key={c.id} value={c.id}>{c.name}</option>)
@@ -93,13 +92,13 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
                       </select>
                    </div>
                    <div className="p-2">
-                      <label>
+                      <label className={`${ errors.wallet_id_to && "text-red-600"}`}>
                          To
                       </label>
                       <select
-                          {...register("to")}
+                          {...register("wallet_id_to")}
                           defaultValue={receiver?selectedWallet:-1}
-                          className="block py-2.5 transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                          className={`block py-2.5 ${ errors.wallet_id_to && "border-red-600"} transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
                          <option value="-1"></option>
                          {
                             wallets.map((c, i) => <option  disabled={!receiver&&selectedWallet===c.id} key={c.id} value={c.id}>{c.name}</option>)

@@ -15,13 +15,53 @@ export const useWalletHook = () => {
 
    const {setInfo, currentCurrency, setError} = useAppStore()
 
-   const {transactions, initial, setInitial} = useTransactionsStore()
+   const {transactions, initial, setInitial, income, outcome, setOutcome, setIncome} = useTransactionsStore()
 
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
 
    const exchangeMoney = useCallback(async (data) => {
-      console.log(data)
-   }, [wallets])
+      const fromWallet = wallets.find(wallet => wallet.id === data.wallet_id_from)
+      const amount = convert(data.currency.toLowerCase(), fromWallet.currency.toLowerCase(), data.amount)
+      if(+fromWallet.balance < +amount) {
+         setError("You don't have enough funds in your wallet")
+         return
+      }
+      data = {
+         ...data,
+         amount
+      }
+      delete data.currency
+      const result = await fetchData("/accounts/wallet-exchange/", "POST", data)
+      console.log(result)
+
+      setWallet([
+          ...wallets.filter(wallet => wallet.id === data.wallet_id_from),
+          ...wallets.filter(wallet => wallet.id === data.wallet_id_to),
+          result.wallet_from,
+          result.wallet_to
+      ])
+
+      setIncome([
+          ...income,
+         {
+            ...result.income_transaction,
+            wallet: result.wallet_to,
+            money: null
+         }
+      ])
+
+      setOutcome([
+         ...outcome,
+         {
+            ...result.outcome_transaction,
+            wallet: result.wallet_from
+         }
+      ])
+
+
+
+
+   }, [wallets, income, outcome])
 
    const redirectToWallet = useCallback(() => {
       if(!wallets.length) navigate("/admin/profile")
@@ -87,5 +127,6 @@ export const useWalletHook = () => {
       }
    }, [wallets])
 
-   return {getCurrencyRate, convert, totalBalance, exchangeMoney, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories, redirectToWallet }
+
+   return {getCurrencyRate, convert,  totalBalance, exchangeMoney, convertToCurrentCurrency, addWallet, getWallet, updateWallet, getCategories, redirectToWallet }
 }
