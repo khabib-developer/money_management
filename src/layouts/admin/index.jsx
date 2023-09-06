@@ -22,29 +22,29 @@ export default function Admin(props) {
 
   const {logout} = useAuthHook()
 
-  // useEffect(() => {
-  //   let lastActivityTimestamp = Date.now();
-  //
-  //   const handleInactivity = () => {
-  //     lastActivityTimestamp = Date.now();
-  //   };
-  //
-  //   const checkInactivity = () => {
-  //     const currentTime = Date.now();
-  //     if (currentTime - lastActivityTimestamp >= 300000) {
-  //       logout().then(() => console.log('logout'));
-  //     }
-  //   };
-  //
-  //   document.addEventListener("click", handleInactivity, {passive:true});
-  //
-  //   const interval = setInterval(checkInactivity, 60000); // Check every minute
-  //
-  //   return () => {
-  //     document.removeEventListener("click", handleInactivity);
-  //     clearInterval(interval);
-  //   };
-  // }, [])
+  useEffect(() => {
+    let lastActivityTimestamp = Date.now();
+
+    const handleInactivity = () => {
+      lastActivityTimestamp = Date.now();
+    };
+
+    const checkInactivity = () => {
+      const currentTime = Date.now();
+      if (currentTime - lastActivityTimestamp >= 300000) {
+        logout().then(() => console.log('logout'));
+      }
+    };
+
+    document.addEventListener("click", handleInactivity, {passive:true});
+
+    const interval = setInterval(checkInactivity, 60000); // Check every minute
+
+    return () => {
+      document.removeEventListener("click", handleInactivity);
+      clearInterval(interval);
+    };
+  }, [])
 
   useEffect(() => {
     (async function(){
