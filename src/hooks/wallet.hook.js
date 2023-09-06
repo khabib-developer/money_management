@@ -20,8 +20,8 @@ export const useWalletHook = () => {
    const {setCurrencyRate, wallets, currencyRate, setWallet, setCategories} = useWalletStore()
 
    const exchangeMoney = useCallback(async (data) => {
-      const fromWallet = wallets.find(wallet => wallet.id === data.wallet_id_from)
-      const amount = convert(data.currency.toLowerCase(), fromWallet.currency.toLowerCase(), data.amount)
+      const fromWallet = wallets.find(wallet => +wallet.id === +data.wallet_id_from)
+      const amount = convert(data.currency.toUpperCase(), fromWallet.currency.toUpperCase(), data.amount)
       if(+fromWallet.balance < +amount) {
          setError("You don't have enough funds in your wallet")
          return
@@ -32,11 +32,9 @@ export const useWalletHook = () => {
       }
       delete data.currency
       const result = await fetchData("/accounts/wallet-exchange/", "POST", data)
-      console.log(result)
 
       setWallet([
-          ...wallets.filter(wallet => wallet.id === data.wallet_id_from),
-          ...wallets.filter(wallet => wallet.id === data.wallet_id_to),
+          ...wallets.filter(wallet => (wallet.id !== +data.wallet_id_from &&  wallet.id !== +data.wallet_id_to)),
           result.wallet_from,
           result.wallet_to
       ])
@@ -57,9 +55,6 @@ export const useWalletHook = () => {
             wallet: result.wallet_from
          }
       ])
-
-
-
 
    }, [wallets, income, outcome])
 

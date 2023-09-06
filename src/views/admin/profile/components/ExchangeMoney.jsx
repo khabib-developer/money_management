@@ -58,16 +58,9 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
    }, [isOpen])
 
    const handleSend = async (data) => {
-      // onClose()
-      // await addWallet(
-      //     {
-      //        ...data,
-      //        currency: data.currency.toUpperCase(),
-      //        category: Number(data.category),
-      //        user: user.id
-      //     })
+      onClose()
       await exchangeMoney(data)
-      // reset({})
+      reset({})
    }
    return (
        <Modal onClose={onClose} size={'lg'} isOpen={isOpen}>
