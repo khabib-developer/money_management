@@ -12,7 +12,7 @@ export const useAuthHook = () => {
 
    const {setInfo, setError, setActiveUserData} = useAppStore()
 
-   const {setUser, setPermission} = useAppStore()
+   const {setUser, setPermission, user} = useAppStore()
 
    const {getWallet, getCategories} = useWalletHook()
 
@@ -33,6 +33,10 @@ export const useAuthHook = () => {
          setInfo("Activation link sent successfully to email address")
          return true
       }
+   }, [])
+
+   const exitTime = useCallback(async (user) => {
+      await fetchData("accounts/exit-session/", "POST", {user, exit_time: Date.now()})
    }, [])
 
    const sendLinkToMail = useCallback(async (body) => {
@@ -102,5 +106,5 @@ export const useAuthHook = () => {
    }, [])
 
 
-   return {auth, check, logout, sendLinkToMail, resetPassword, verifyLink, deleteAccount, verifyRegisterLink}
+   return {auth, check, exitTime, logout, sendLinkToMail, resetPassword, verifyLink, deleteAccount, verifyRegisterLink}
 }

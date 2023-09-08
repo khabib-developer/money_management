@@ -14,11 +14,11 @@ export default function Admin(props) {
   const [open, setOpen] = React.useState(true);
   const [currentRoute, setCurrentRoute] = React.useState("Main Dashboard");
 
-  const {check} = useAuthHook()
+  const {check, exitTime} = useAuthHook()
 
   const {getCurrencyRate} = useWalletHook()
 
-  const { permission, full, setFull} = useAppStore()
+  const { permission, full, setFull, user} = useAppStore()
 
   const {logout} = useAuthHook()
 
@@ -54,7 +54,15 @@ export default function Admin(props) {
     window.addEventListener("resize", () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
+
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload",async (event) => {
+      // event.preventDefault();
+      if(user) await exitTime(user.id)
+    })
+  }, [user])
 
   useEffect(() => {
     getActiveRoute(routes);
