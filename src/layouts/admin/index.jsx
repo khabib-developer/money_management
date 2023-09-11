@@ -25,7 +25,10 @@ export default function Admin(props) {
   useEffect(() => {
     let lastActivityTimestamp = Date.now();
 
-    const handleInactivity = () => {
+    const modal = document.querySelector(".chakra-modal__content")
+
+    const handleInactivity = (e) => {
+      e.stopPropagation()
       lastActivityTimestamp = Date.now();
     };
 
@@ -36,12 +39,15 @@ export default function Admin(props) {
       }
     };
 
-    document.addEventListener("click", handleInactivity, {passive:true});
+    document.addEventListener("mousemove", handleInactivity, {passive: true});
+
+    modal&&modal.addEventListener("click", handleInactivity);
 
     const interval = setInterval(checkInactivity, 60000); // Check every minute
 
     return () => {
       document.removeEventListener("click", handleInactivity);
+      modal&&modal.removeEventListener("click", handleInactivity);
       clearInterval(interval);
     };
   }, [])

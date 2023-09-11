@@ -72,9 +72,13 @@ const WalletCard = ({ name, amount, currency, type,  image, extra, id }) => {
               <span className="text-xs">{type}</span>
             </div>
             <div className="absolute justify-end exchange__money w-full flex mt-2 top-1/3 gap-5">
-              <BtnCom className="transparent border-amber-50 border-2" onClick={() => handleExchange(false)}>
-                Send
-              </BtnCom>
+
+              {
+                amount > 0 && <BtnCom className="transparent border-amber-50 border-2" onClick={() => handleExchange(false)}>
+                    Send
+                  </BtnCom>
+              }
+
               <BtnCom className="transparent border-amber-50 border-2 mr-9" onClick={() => handleExchange(true)}>
                 Receive
               </BtnCom>

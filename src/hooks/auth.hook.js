@@ -6,6 +6,8 @@ import {useWalletHook} from "./wallet.hook";
 import {useTargetHook} from "./target.hook";
 import {useTransactionHook} from "./transactions.hook";
 
+const BASE_URL = "http://35.225.155.180"
+
 export const useAuthHook = () => {
 
    const {fetchData} = useAxios()
@@ -50,11 +52,11 @@ export const useAuthHook = () => {
    }, [])
 
    const verifyLink = useCallback(async (token) => {
-      return await fetchData(`https://mm.airi.uz/api/accounts/verify/?token=${token}`)
+      return await fetchData(`${BASE_URL}/api/accounts/verify/?token=${token}`)
    }, [])
 
    const verifyRegisterLink = useCallback(async (token) => {
-      const user = await fetchData(`https://mm.airi.uz/api/accounts/register/?token=${token}`)
+      const user = await fetchData(`${BASE_URL}/api/accounts/register/?token=${token}`)
       if(user) {
          setActiveUserData(user)
          setInfo("Link successfully activated")

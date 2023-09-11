@@ -1,6 +1,7 @@
 import React from 'react';
 import prettyNum from "pretty-num";
 import dateFormat from "dateformat";
+import {ceil} from "../../../../utils";
 
 const TransactionListItem = ({transaction}) => {
    return (
@@ -8,7 +9,7 @@ const TransactionListItem = ({transaction}) => {
           <div className="flex-1 text-sm">{transaction.description}</div>
           <div
               className="flex-1 text-sm">
-             {prettyNum(transaction.amount, {thousandsSeparator: ' '})} {transaction.wallet.currency}
+             {prettyNum(ceil(transaction.amount), {thousandsSeparator: ' '})} {transaction.wallet.currency}
           </div>
           <div className="flex-1 text-sm">
              {transaction.money?transaction.money.name:<span>Exchange money from another wallet</span>}

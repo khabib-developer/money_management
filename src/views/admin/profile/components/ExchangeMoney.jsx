@@ -16,7 +16,6 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {currency} from "../../../../contants";
 import {useWalletHook} from "../../../../hooks/wallet.hook";
-import {useAppStore} from "../../../../store/index.store";
 import {useWalletStore} from "../../../../store/wallet.store";
 
 const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
@@ -33,6 +32,7 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
       handleSubmit,
       reset,
       formState: {errors},
+      watch
    } = useForm({
       resolver: yupResolver(
           yup
@@ -45,6 +45,9 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
               .required()
       ),
    });
+
+   const from =  watch("wallet_id_to") ? watch("wallet_id_to") : receiver ? selectedWallet:-1
+   const to = watch("wallet_id_from") ? watch("wallet_id_from") : !receiver ? selectedWallet:-1
 
    useEffect(() => {
       if (!!selectedWallet) onOpen()
@@ -70,38 +73,41 @@ const ExchangeMoney = ({selectedWallet, setSelectedWallet, receiver}) => {
              <ModalCloseButton/>
              <form onSubmit={handleSubmit(handleSend)}>
                 <ModalBody>
-                   <div className="p-2">
-                      <label className={`${ errors.wallet_id_from && "text-red-600"}`}>
-                         From
-                      </label>
-                      <select
-                          {...register("wallet_id_from")}
-                          defaultValue={!receiver?selectedWallet:-1}
-                          className={`block ${ errors.wallet_id_from && "border-red-600"} py-2.5 transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
-                         <option value="-1"></option>
-                         {
-                            wallets.map((c, i) => <option disabled={receiver&&selectedWallet===c.id} key={c.id} value={c.id}>{c.name}</option>)
-                         }
-                      </select>
+                   <div className="p-2 flex gap-3">
+                      <div className="flex-1">
+                         <label className={`${ errors.wallet_id_from && "text-red-600"}`}>
+                            From
+                         </label>
+                         <select
+                             {...register("wallet_id_from")}
+                             defaultValue={!receiver?selectedWallet:-1}
+                             className={`${ errors.wallet_id_from && "border-red-600"} py-2.5  px-0 w-full text-sm text-gray-500  border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
+                            <option value="-1"></option>
+                            {
+                               wallets.map((c, i) => <option disabled={+from===+c.id} key={c.id} value={c.id}>{c.name}</option>)
+                            }
+                         </select>
+                      </div>
+                      <div className="flex-1">
+                         <label className={`${ errors.wallet_id_to && "text-red-600"}`}>
+                            To
+                         </label>
+                         <select
+                             {...register("wallet_id_to")}
+                             defaultValue={receiver?selectedWallet:-1}
+                             className={` py-2.5 ${ errors.wallet_id_to && "border-red-600"}  px-0 w-full text-sm text-gray-500  border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
+                            <option value="-1"></option>
+                            {
+                               wallets.map((c, i) => <option disabled={+to===+c.id} key={c.id} value={c.id}>{c.name}</option>)
+                            }
+                         </select>
+                      </div>
                    </div>
-                   <div className="p-2">
-                      <label className={`${ errors.wallet_id_to && "text-red-600"}`}>
-                         To
-                      </label>
-                      <select
-                          {...register("wallet_id_to")}
-                          defaultValue={receiver?selectedWallet:-1}
-                          className={`block py-2.5 ${ errors.wallet_id_to && "border-red-600"} transparent px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer`}>
-                         <option value="-1"></option>
-                         {
-                            wallets.map((c, i) => <option  disabled={!receiver&&selectedWallet===c.id} key={c.id} value={c.id}>{c.name}</option>)
-                         }
-                      </select>
-                   </div>
+
                    <div className="flex gap-1 justify-between items-end">
                       <InputField label="Amount" extra="flex-1" placeholder="Amount of money"
                                   state={errors.amount && "error"}
-                                  register={register} name="amount" type="number"/>
+                                  register={register} name="amount" type=""/>
                       <select
                           style={{right: "36px"}}
                           {...register("currency")}
