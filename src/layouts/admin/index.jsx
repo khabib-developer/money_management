@@ -58,6 +58,7 @@ export default function Admin(props) {
   }, []);
 
   useEffect(() => {
+
     window.addEventListener("beforeunload",async (event) => {
       // event.preventDefault();
       if(user) await exitTime(user.id)

@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://mm.airi.uz/api/:path*"
+      "destination": "http://35.225.155.180/api/:path*"
     },
     {
       "source": "/api/:path*/",
-      "destination": "https://mm.airi.uz/api/:path*/"
+      "destination": "http://35.225.155.180/api/:path*/"
     }
   ]
 }
