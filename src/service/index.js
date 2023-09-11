@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useAppStore} from "../store/index.store";
 
-const BASE_URL = "http://35.225.155.180/api"
+const BASE_URL = "/api"
 
 axios.defaults.baseURL = BASE_URL;
 
